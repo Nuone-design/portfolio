@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loops — Nuwan Withanage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080808; --surface: #111111; --surface-2: #161616;
+      --border: #1e1e1e; --text: #f0f0f0; --text-muted: #888888;
+      --text-mid: #b0b0b0; --accent: #c8ff00;
+      --font-sans: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --pad-x: clamp(24px, 5vw, 80px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-weight: 300; font-size: 16px; line-height: 1.7; cursor: none; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    #c-dot, #c-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: difference; }
+    #c-dot { width: 8px; height: 8px; background: var(--text); }
+    #c-ring { width: 32px; height: 32px; border: 1px solid rgba(240,240,240,0.5); transition: width .2s, height .2s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 0; transition: padding .4s, background .4s, backdrop-filter .4s; }
+    nav.blur { padding: 18px 0; background: rgba(8,8,8,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1360px; margin: 0 auto; padding: 0 var(--pad-x); }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; color: var(--text); }
+    .nav-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); display: inline-flex; align-items: center; gap: 10px; transition: color .2s, gap .2s; }
+    .nav-back:hover { color: var(--text); gap: 16px; }
+
+    .r { opacity: 0; transform: translateY(20px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+    .r.on { opacity: 1; transform: none; }
+    .r-d1 { transition-delay: .1s; } .r-d2 { transition-delay: .2s; }
+
+    .cs-header { padding-top: 140px; padding-bottom: 80px; border-bottom: 1px solid var(--border); }
+    .cs-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+    .cs-meta-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+    .cs-meta-sep { color: var(--border); }
+    .cs-title { font-size: clamp(52px, 9vw, 120px); font-weight: 200; letter-spacing: -.04em; line-height: .92; color: var(--text); margin-bottom: 64px; }
+    .cs-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .cs-summary { font-size: clamp(17px, 2vw, 21px); font-weight: 300; line-height: 1.6; color: var(--text-mid); }
+    .cs-summary strong { color: var(--text); font-weight: 400; }
+    .cs-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); align-self: start; }
+    .cs-stat { background: var(--bg); padding: 28px 24px; }
+    .cs-stat-n { font-size: 36px; font-weight: 200; letter-spacing: -.03em; color: var(--text); line-height: 1; margin-bottom: 6px; }
+    .cs-stat-n sup { font-size: 14px; }
+    .cs-stat-l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+
+    .img-section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    .img-hero { width: 100%; height: clamp(320px, 55vw, 700px); overflow: hidden; position: relative; }
+    .img-hero img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+    .img-hero:hover img { transform: scale(1.04); }
+
+    .bento { display: grid; gap: 12px; margin-top: 12px; }
+    .bento-2 { grid-template-columns: 1fr 1fr; }
+    .bento-3 { grid-template-columns: 2fr 1fr 1fr; }
+    .bento-3b { grid-template-columns: 1fr 1fr 2fr; }
+    .bento-asym { grid-template-columns: 3fr 2fr; }
+
+    .img-cell { overflow: hidden; position: relative; background: var(--surface); }
+    .img-cell.tall { height: clamp(240px, 35vw, 480px); }
+    .img-cell.medium { height: clamp(200px, 26vw, 360px); }
+    .img-cell.short { height: clamp(160px, 20vw, 280px); }
+
+    .img-cell img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+    .img-cell:hover img { transform: scale(1.06); }
+    .img-cell.r img { transform: scale(1.08); }
+    .img-cell.r.on img { transform: scale(1); }
+    .img-cell:hover img { transform: scale(1.06) !important; }
+
+    .img-caption { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 20px; }
+
+    .text-section { padding: 96px 0; border-bottom: 1px solid var(--border); }
+    .text-grid { display: grid; grid-template-columns: 220px 1fr; gap: 80px; }
+    .text-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); padding-top: 6px; }
+    .text-body p { font-size: clamp(16px, 1.8vw, 19px); font-weight: 300; line-height: 1.75; color: var(--text-mid); margin-bottom: 24px; }
+    .text-body p:last-child { margin-bottom: 0; }
+    .text-body strong { color: var(--text); font-weight: 400; }
+
+    .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--border); transition: padding .3s; }
+    .next-project:hover { padding-left: 20px; }
+    .next-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .next-name { font-size: clamp(32px, 5vw, 64px); font-weight: 200; letter-spacing: -.03em; color: var(--text); }
+    .next-arrow { font-size: 32px; color: var(--text-muted); transition: transform .3s, color .3s; }
+    .next-project:hover .next-arrow { transform: translate(8px,-8px); color: var(--accent); }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; }
+    .footer-copy { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 28px; list-style: none; }
+    .footer-links a { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 900px) {
+      /* Nav */
+      nav { padding: 20px 0; }
+
+      /* Header */
+      .cs-header { padding-top: 96px; padding-bottom: 48px; }
+      .cs-intro { grid-template-columns: 1fr; gap: 36px; }
+      .cs-stats { grid-template-columns: 1fr 1fr; }
+
+      /* Images */
+      .bento-2, .bento-3, .bento-3b, .bento-asym { grid-template-columns: 1fr; }
+      .img-cell.tall  { height: clamp(200px, 56vw, 340px); }
+      .img-cell.medium { height: clamp(180px, 48vw, 300px); }
+      .img-hero { height: clamp(200px, 56vw, 360px); }
+
+      /* Text sections */
+      .text-section { padding: 56px 0; }
+      .text-grid { grid-template-columns: 1fr; gap: 20px; }
+      .text-body p { font-size: 16px; }
+
+      /* Pull quotes */
+      .pull-quote { padding: 48px 0; }
+      .pull-quote blockquote { padding-left: 20px; font-size: clamp(18px, 5vw, 32px); }
+
+      /* Next project */
+      .next-project { padding: 40px 0; }
+      .next-project:hover { padding-left: 0; }
+      .next-name { font-size: clamp(28px, 7vw, 48px); }
+
+      /* Footer */
+      .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .cs-header { padding-top: 80px; padding-bottom: 36px; }
+      .cs-stats { gap: 1px; }
+      .cs-stat { padding: 16px; }
+      .cs-stat-n { font-size: 20px; }
+      .text-section { padding: 40px 0; }
+      .img-hero { height: 52vw; }
+      .img-cell.tall, .img-cell.medium { height: 56vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="c-dot" aria-hidden="true"></div>
+  <div id="c-ring" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <div class="wrap">
+      <a href="/" class="nav-logo">NW</a>
+      <a href="/" class="nav-back"><span>←</span> All work</a>
+    </div>
+  </nav>
+
+  <header class="cs-header">
+    <div class="wrap">
+      <div class="cs-meta r">
+        <span class="cs-meta-tag">AI-Powered Workflow Tool</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">Product Strategy</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">2023 – 2024</span>
+      </div>
+      <h1 class="cs-title r r-d1">Loops</h1>
+      <div class="cs-intro">
+        <p class="cs-summary r r-d1">
+          An AI-native workflow tool for operations teams. Built in a high-ambiguity environment with a founding team of six. <strong>I led design from the first whiteboard session through public launch</strong> — shaping product strategy, navigating AI UX patterns, and building trust with non-technical users who were deeply sceptical of automation.
+        </p>
+        <div class="cs-stats r r-d2">
+          <div class="cs-stat">
+            <div class="cs-stat-n">0<span style="color:var(--accent)">→</span>1</div>
+            <div class="cs-stat-l">Full product design</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">60<sup>%</sup></div>
+            <div class="cs-stat-l">Onboarding improvement</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">4.8</div>
+            <div class="cs-stat-l">App store rating</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">12<sup>mo</sup></div>
+            <div class="cs-stat-l">Seed to launch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero image -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="img-hero r">
+        <img src="https://placehold.co/1280x700/111111/555555?text=Loops+—+AI+Workflow+Interface" alt="Loops workflow interface" data-parallax="0.15" />
+      </div>
+      <p class="img-caption r">Loops interface — AI suggestion layer on top of manual workflow</p>
+    </div>
+  </div>
+
+  <!-- Problem -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">The Problem</div>
+        <div class="text-body">
+          <p class="r">Operations teams run on repetition. The same approval chains, the same routing logic, the same exception handling — hundreds of times a week. The opportunity was clear: <strong>use AI to handle the pattern recognition, let humans handle the exceptions</strong>.</p>
+          <p class="r r-d1">The challenge was trust. These users had been burned by automation before — by tools that broke silently, gave no explanation, and left them holding the consequences. Making AI feel reliable, not reckless, was the central design problem.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images — bento -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="bento bento-asym r">
+        <div class="img-cell tall">
+          <img src="https://placehold.co/800x560/111111/555555?text=AI+Suggestion+Panel" alt="AI suggestion panel" data-parallax="0.1" />
+        </div>
+        <div class="img-cell tall">
+          <img src="https://placehold.co/560x560/161616/555555?text=Confidence+Indicators" alt="Confidence indicators" data-parallax="0.18" />
+        </div>
+      </div>
+      <p class="img-caption r">AI suggestion panel with confidence indicators and override controls</p>
+    </div>
+  </div>
+
+  <!-- Role -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">My Role</div>
+        <div class="text-body">
+          <p class="r">Solo designer on a founding team. I ran research sprints with early beta users, <strong>defined the AI transparency model</strong> (what the system shows about its reasoning, when it asks for confirmation, when it acts silently), and shipped the product design in eight weeks from first prototype.</p>
+          <p class="r r-d1">I also pushed back on the original product scope. The v1 spec was too broad. I made the case — with data from six user interviews — to cut three features and ship a tighter core. That decision is what let us launch on time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images 2 -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="bento bento-3 r">
+        <div class="img-cell medium">
+          <img src="https://placehold.co/800x440/111111/555555?text=Onboarding+Flow" alt="Onboarding flow" data-parallax="0.08" />
+        </div>
+        <div class="img-cell medium">
+          <img src="https://placehold.co/400x440/161616/555555?text=Empty+State" alt="Empty state" data-parallax="0.14" />
+        </div>
+        <div class="img-cell medium">
+          <img src="https://placehold.co/400x440/161616/555555?text=Error+Handling" alt="Error handling" data-parallax="0.1" />
+        </div>
+      </div>
+      <div class="img-hero r" style="margin-top:12px; height:clamp(240px,30vw,400px);">
+        <img src="https://placehold.co/1280x480/111111/555555?text=Workflow+Builder" alt="Workflow builder" data-parallax="0.12" />
+      </div>
+      <p class="img-caption r">Onboarding, edge cases, and the workflow builder canvas</p>
+    </div>
+  </div>
+
+  <!-- Outcome -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">Outcome</div>
+        <div class="text-body">
+          <p class="r">Loops launched to a 4.8 App Store rating. Onboarding completion improved 60% over our initial prototype. <strong>The trust model worked</strong> — users reported feeling "in control" even when the AI was doing most of the work, which was the exact thing we were designing for.</p>
+          <p class="r r-d1">The company closed a Series A six months post-launch. The design system and AI transparency framework I built became a core part of the pitch deck.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images 3 -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="bento bento-3b r">
+        <div class="img-cell tall">
+          <img src="https://placehold.co/400x560/161616/555555?text=Mobile+View" alt="Mobile view" data-parallax="0.12" />
+        </div>
+        <div class="img-cell tall">
+          <img src="https://placehold.co/400x560/111111/555555?text=Notifications" alt="Notifications" data-parallax="0.08" />
+        </div>
+        <div class="img-cell tall">
+          <img src="https://placehold.co/800x560/111111/555555?text=Analytics+Dashboard" alt="Analytics" data-parallax="0.15" />
+        </div>
+      </div>
+      <p class="img-caption r">Mobile experience, notification system, and analytics dashboard</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <a href="atlas.html" class="next-project">
+      <div>
+        <div class="next-label">Next project</div>
+        <div class="next-name">Atlas</div>
+      </div>
+      <span class="next-arrow">↗</span>
+    </a>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2024 Nuwan Withanage</span>
+        <ul class="footer-links">
+          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:hello@nuwan.design">Email</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const dot=document.getElementById('c-dot'),ring=document.getElementById('c-ring');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    (function loop(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('blur',scrollY>60),{passive:true});
+
+    document.querySelectorAll('.r').forEach(el=>
+      new IntersectionObserver(([e])=>{if(e.isIntersecting)el.classList.add('on');},{threshold:.1,rootMargin:'0px 0px -32px 0px'}).observe(el)
+    );
+
+    const parallaxImgs=document.querySelectorAll('img[data-parallax]');
+    function onScroll(){
+      parallaxImgs.forEach(img=>{
+        const factor=parseFloat(img.dataset.parallax);
+        const rect=img.closest('.img-cell,.img-hero').getBoundingClientRect();
+        const center=rect.top+rect.height/2-window.innerHeight/2;
+        img.style.transform=`translateY(${center*factor}px) scale(1)`;
+      });
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas — Nuwan Withanage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #080808; --surface: #111111; --surface-2: #161616;
+      --border: #1e1e1e; --text: #f0f0f0; --text-muted: #888888;
+      --text-mid: #b0b0b0; --accent: #c8ff00;
+      --font-sans: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --pad-x: clamp(24px, 5vw, 80px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-weight: 300; font-size: 16px; line-height: 1.7; cursor: none; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    #c-dot, #c-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: difference; }
+    #c-dot { width: 8px; height: 8px; background: var(--text); }
+    #c-ring { width: 32px; height: 32px; border: 1px solid rgba(240,240,240,0.5); transition: width .2s, height .2s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 0; transition: padding .4s, background .4s, backdrop-filter .4s; }
+    nav.blur { padding: 18px 0; background: rgba(8,8,8,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1360px; margin: 0 auto; padding: 0 var(--pad-x); }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; color: var(--text); }
+    .nav-back { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); display: inline-flex; align-items: center; gap: 10px; transition: color .2s, gap .2s; }
+    .nav-back:hover { color: var(--text); gap: 16px; }
+
+    .r { opacity: 0; transform: translateY(20px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+    .r.on { opacity: 1; transform: none; }
+    .r-d1 { transition-delay: .1s; } .r-d2 { transition-delay: .2s; }
+
+    .cs-header { padding-top: 140px; padding-bottom: 80px; border-bottom: 1px solid var(--border); }
+    .cs-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+    .cs-meta-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+    .cs-meta-sep { color: var(--border); }
+    .cs-title { font-size: clamp(52px, 9vw, 120px); font-weight: 200; letter-spacing: -.04em; line-height: .92; color: var(--text); margin-bottom: 64px; }
+    .cs-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .cs-summary { font-size: clamp(17px, 2vw, 21px); font-weight: 300; line-height: 1.6; color: var(--text-mid); }
+    .cs-summary strong { color: var(--text); font-weight: 400; }
+    .cs-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); align-self: start; }
+    .cs-stat { background: var(--bg); padding: 28px 24px; }
+    .cs-stat-n { font-size: 36px; font-weight: 200; letter-spacing: -.03em; color: var(--text); line-height: 1; margin-bottom: 6px; }
+    .cs-stat-n sup { font-size: 14px; }
+    .cs-stat-l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+
+    .img-section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    .img-hero { width: 100%; height: clamp(320px, 55vw, 700px); overflow: hidden; position: relative; }
+    .img-hero img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+    .img-hero:hover img { transform: scale(1.04); }
+
+    .bento { display: grid; gap: 12px; margin-top: 12px; }
+    .bento-2 { grid-template-columns: 1fr 1fr; }
+    .bento-3 { grid-template-columns: 2fr 1fr 1fr; }
+    .bento-3b { grid-template-columns: 1fr 1fr 2fr; }
+    .bento-reverse { grid-template-columns: 1fr 2fr; }
+
+    .img-cell { overflow: hidden; position: relative; background: var(--surface); }
+    .img-cell.tall { height: clamp(240px, 35vw, 480px); }
+    .img-cell.medium { height: clamp(200px, 26vw, 360px); }
+    .img-cell.short { height: clamp(160px, 20vw, 280px); }
+
+    .img-cell img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+    .img-cell:hover img { transform: scale(1.06); }
+    .img-cell.r img { transform: scale(1.08); }
+    .img-cell.r.on img { transform: scale(1); }
+    .img-cell:hover img { transform: scale(1.06) !important; }
+
+    .img-caption { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 20px; }
+
+    .text-section { padding: 96px 0; border-bottom: 1px solid var(--border); }
+    .text-grid { display: grid; grid-template-columns: 220px 1fr; gap: 80px; }
+    .text-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); padding-top: 6px; }
+    .text-body p { font-size: clamp(16px, 1.8vw, 19px); font-weight: 300; line-height: 1.75; color: var(--text-mid); margin-bottom: 24px; }
+    .text-body p:last-child { margin-bottom: 0; }
+    .text-body strong { color: var(--text); font-weight: 400; }
+
+    /* Differently-done block — pull quote */
+    .pull-quote {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pull-quote blockquote {
+      font-size: clamp(22px, 3.5vw, 44px);
+      font-weight: 200;
+      letter-spacing: -.025em;
+      line-height: 1.3;
+      color: var(--text);
+      border-left: 1px solid var(--accent);
+      padding-left: 40px;
+      max-width: 860px;
+    }
+
+    .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--border); transition: padding .3s; }
+    .next-project:hover { padding-left: 20px; }
+    .next-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .next-name { font-size: clamp(32px, 5vw, 64px); font-weight: 200; letter-spacing: -.03em; color: var(--text); }
+    .next-arrow { font-size: 32px; color: var(--text-muted); transition: transform .3s, color .3s; }
+    .next-project:hover .next-arrow { transform: translate(8px,-8px); color: var(--accent); }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; }
+    .footer-copy { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 28px; list-style: none; }
+    .footer-links a { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 900px) {
+      /* Nav */
+      nav { padding: 20px 0; }
+
+      /* Header */
+      .cs-header { padding-top: 96px; padding-bottom: 48px; }
+      .cs-intro { grid-template-columns: 1fr; gap: 36px; }
+      .cs-stats { grid-template-columns: 1fr 1fr; }
+
+      /* Images */
+      .bento-2, .bento-3, .bento-3b, .bento-reverse { grid-template-columns: 1fr; }
+      .img-cell.tall  { height: clamp(200px, 56vw, 340px); }
+      .img-cell.medium { height: clamp(180px, 48vw, 300px); }
+      .img-hero { height: clamp(200px, 56vw, 360px); }
+
+      /* Text sections */
+      .text-section { padding: 56px 0; }
+      .text-grid { grid-template-columns: 1fr; gap: 20px; }
+      .text-body p { font-size: 16px; }
+
+      /* Pull quote */
+      .pull-quote { padding: 48px 0; }
+      .pull-quote blockquote { padding-left: 20px; font-size: clamp(18px, 5vw, 36px); }
+
+      /* Next project */
+      .next-project { padding: 40px 0; }
+      .next-project:hover { padding-left: 0; }
+      .next-name { font-size: clamp(28px, 7vw, 48px); }
+
+      /* Footer */
+      .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .cs-header { padding-top: 80px; padding-bottom: 36px; }
+      .cs-stats { gap: 1px; }
+      .cs-stat { padding: 16px; }
+      .cs-stat-n { font-size: 20px; }
+      .text-section { padding: 40px 0; }
+      .img-hero { height: 52vw; }
+      .img-cell.tall, .img-cell.medium { height: 56vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="c-dot" aria-hidden="true"></div>
+  <div id="c-ring" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <div class="wrap">
+      <a href="/" class="nav-logo">NW</a>
+      <a href="/" class="nav-back"><span>←</span> All work</a>
+    </div>
+  </nav>
+
+  <header class="cs-header">
+    <div class="wrap">
+      <div class="cs-meta r">
+        <span class="cs-meta-tag">Navigation &amp; IA Overhaul</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">Research-led</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">2021 – 2022</span>
+      </div>
+      <h1 class="cs-title r r-d1">Atlas</h1>
+      <div class="cs-intro">
+        <p class="cs-summary r r-d1">
+          A navigation and information architecture overhaul for a scaled B2B product with 200k+ users. <strong>The product had grown organically for four years</strong> — features bolted on without a coherent mental model. Users were lost, support tickets were climbing, and churn was starting to correlate with navigation confusion.
+        </p>
+        <div class="cs-stats r r-d2">
+          <div class="cs-stat">
+            <div class="cs-stat-n">200<sup>k+</sup></div>
+            <div class="cs-stat-l">Active users</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">38<sup>%</sup></div>
+            <div class="cs-stat-l">Nav-related tickets down</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">6</div>
+            <div class="cs-stat-l">Stakeholder teams aligned</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-n">91<sup>%</sup></div>
+            <div class="cs-stat-l">Tree test success rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero image -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="img-hero r">
+        <img src="https://placehold.co/1280x700/111111/555555?text=Atlas+—+Navigation+System" alt="Atlas navigation system" data-parallax="0.15" />
+      </div>
+      <p class="img-caption r">New navigation architecture — final production rollout</p>
+    </div>
+  </div>
+
+  <!-- Problem -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">The Problem</div>
+        <div class="text-body">
+          <p class="r">Four years of feature additions without a coherent architecture left the product feeling like a drawer you'd stopped trying to organise. <strong>Users knew what they wanted to do but couldn't find where to do it</strong>. Support data showed that 38% of tickets were navigation-related — users looking for things that existed.</p>
+          <p class="r r-d1">The harder problem was organisational. Every team had opinions about "their" section of the nav. Getting six product squads to agree on a new architecture required the research to be undeniable and the process to be inclusive.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images 1 -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="bento bento-2 r">
+        <div class="img-cell tall">
+          <img src="https://placehold.co/640x560/111111/555555?text=Current+State+Audit" alt="Current state audit" data-parallax="0.1" />
+        </div>
+        <div class="img-cell tall">
+          <img src="https://placehold.co/640x560/161616/555555?text=Card+Sort+Results" alt="Card sort results" data-parallax="0.16" />
+        </div>
+      </div>
+      <p class="img-caption r">Current state audit and card sort results across 40 participants</p>
+    </div>
+  </div>
+
+  <!-- Pull quote -->
+  <div class="pull-quote">
+    <div class="wrap">
+      <blockquote class="r">
+        "I know this feature exists. I just have no idea where to find it anymore."
+        <br><br>
+        <span style="font-size: clamp(13px,1.4vw,16px); color: var(--text-muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;">— User interview, participant 14 of 18</span>
+      </blockquote>
+    </div>
+  </div>
+
+  <!-- Role -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">My Role</div>
+        <div class="text-body">
+          <p class="r">I led the research: 18 user interviews, a card sort across 40 participants, and two rounds of tree testing. I synthesised the data into an IA model that reflected how users actually think about the product — not how the engineering teams had organised it.</p>
+          <p class="r r-d1"><strong>The org influence piece was as important as the design work.</strong> I ran six working sessions with product leads from each squad, used the research to arbitrate disputes, and built a governance model so the IA wouldn't drift again after launch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images 2 -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="bento bento-3 r">
+        <div class="img-cell medium">
+          <img src="https://placehold.co/800x440/111111/555555?text=IA+Map+v1" alt="IA map v1" data-parallax="0.08" />
+        </div>
+        <div class="img-cell medium">
+          <img src="https://placehold.co/400x440/161616/555555?text=Tree+Test+Data" alt="Tree test data" data-parallax="0.14" />
+        </div>
+        <div class="img-cell medium">
+          <img src="https://placehold.co/400x440/161616/555555?text=Prototype+Nav" alt="Prototype nav" data-parallax="0.1" />
+        </div>
+      </div>
+      <p class="img-caption r">IA mapping, tree test results, and early prototype navigation</p>
+    </div>
+  </div>
+
+  <!-- Outcome -->
+  <div class="text-section">
+    <div class="wrap">
+      <div class="text-grid">
+        <div class="text-label r">Outcome</div>
+        <div class="text-body">
+          <p class="r">Tree test success rate went from 61% to 91% between v1 and final architecture. After rollout, <strong>navigation-related support tickets dropped 38%</strong> within 90 days. Churn correlation with navigation confusion disappeared in the cohort data.</p>
+          <p class="r r-d1">The governance model I put in place — a bi-quarterly IA review with a cross-functional panel — is still running. The architecture has absorbed two major feature additions without regression.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images 3 -->
+  <div class="img-section">
+    <div class="wrap">
+      <div class="img-hero r" style="height:clamp(280px,38vw,520px);">
+        <img src="https://placehold.co/1280x520/111111/555555?text=Final+Navigation+System" alt="Final navigation system" data-parallax="0.12" />
+      </div>
+      <div class="bento bento-reverse r" style="margin-top:12px;">
+        <div class="img-cell medium">
+          <img src="https://placehold.co/480x360/161616/555555?text=Mobile+Navigation" alt="Mobile navigation" data-parallax="0.1" />
+        </div>
+        <div class="img-cell medium">
+          <img src="https://placehold.co/800x360/111111/555555?text=Search+%2B+Shortcuts" alt="Search and shortcuts" data-parallax="0.08" />
+        </div>
+      </div>
+      <p class="img-caption r">Final navigation system, mobile adaptation, and power-user shortcuts</p>
+    </div>
+  </div>
+
+  <!-- Next (back to top) -->
+  <div class="wrap">
+    <a href="meridian.html" class="next-project">
+      <div>
+        <div class="next-label">Back to first project</div>
+        <div class="next-name">Meridian</div>
+      </div>
+      <span class="next-arrow">↗</span>
+    </a>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2024 Nuwan Withanage</span>
+        <ul class="footer-links">
+          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:hello@nuwan.design">Email</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const dot=document.getElementById('c-dot'),ring=document.getElementById('c-ring');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    (function loop(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('blur',scrollY>60),{passive:true});
+
+    document.querySelectorAll('.r').forEach(el=>
+      new IntersectionObserver(([e])=>{if(e.isIntersecting)el.classList.add('on');},{threshold:.1,rootMargin:'0px 0px -32px 0px'}).observe(el)
+    );
+
+    const parallaxImgs=document.querySelectorAll('img[data-parallax]');
+    function onScroll(){
+      parallaxImgs.forEach(img=>{
+        const factor=parseFloat(img.dataset.parallax);
+        const rect=img.closest('.img-cell,.img-hero').getBoundingClientRect();
+        const center=rect.top+rect.height/2-window.innerHeight/2;
+        img.style.transform=`translateY(${center*factor}px) scale(1)`;
+      });
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  </script>
+</body>
+</html>
