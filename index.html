@@ -8,9 +8,60 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
 
   <style>
+    /* ─── Fonts ───────────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Canela';
+      src: url('assets/Font/Canela-Black-Trial.otf') format('opentype');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Canela';
+      src: url('assets/Font/Canela-BlackItalic-Trial.otf') format('opentype');
+      font-weight: 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sohne';
+      src: url('assets/Font/TestSohne-Extraleicht-BF663d89cd3f5c5.otf') format('opentype');
+      font-weight: 200;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sohne';
+      src: url('assets/Font/TestSohne-Leicht-BF663d89cd4952e.otf') format('opentype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sohne';
+      src: url('assets/Font/TestSohne-LeichtKursiv-BF663d89cd9a361.otf') format('opentype');
+      font-weight: 300;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sohne';
+      src: url('assets/Font/TestSohne-Buch-BF663d89cd32e6a.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sohne';
+      src: url('assets/Font/TestSohne-BuchKursiv-BF663d89cd3e887.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+
     /* ─── Tokens ──────────────────────────────────────────────────── */
     :root {
       --bg:         #080808;
@@ -21,7 +72,7 @@
       --text-muted: #888888;
       --text-mid:   #b0b0b0;
       --accent:     #c8ff00;
-      --font-sans:  'DM Sans', sans-serif;
+      --font-sans:  'Sohne', sans-serif;
       --font-mono:  'DM Mono', monospace;
       --pad-x:      clamp(24px, 5vw, 80px);
       --max-w:      1360px;
@@ -273,8 +324,9 @@
       flex-direction: column;
       align-items: center;
       gap: 0;
+      font-family: 'Canela', serif;
       font-size: clamp(72px, 12vw, 160px);
-      font-weight: 300;
+      font-weight: 900;
       letter-spacing: -0.04em;
       line-height: 0.92;
       color: var(--text);
@@ -690,6 +742,26 @@
       color: var(--text-muted);
     }
 
+    /* Slot-machine counter */
+    .ctr { display: inline-flex; align-items: flex-end; }
+    .ctr-digit-wrap {
+      display: inline-block;
+      overflow: hidden;
+      height: 1em;
+      will-change: filter;
+    }
+    .ctr-digit-track {
+      display: flex;
+      flex-direction: column;
+    }
+    .ctr-digit-track span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 1em;
+      line-height: 1;
+    }
+
     .beyond-link {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -1100,11 +1172,11 @@
           <p class="beyond-col-body">Conversations with design leaders on product impact, leadership, and the practical role of AI in modern product teams.</p>
           <div class="beyond-stats">
             <div>
-              <div class="beyond-stat-n">5.3K</div>
+              <div class="beyond-stat-n" id="ctr-listeners"></div>
               <div class="beyond-stat-l">Listeners</div>
             </div>
             <div>
-              <div class="beyond-stat-n">15K</div>
+              <div class="beyond-stat-n" id="ctr-downloads"></div>
               <div class="beyond-stat-l">Downloads</div>
             </div>
           </div>
@@ -1118,11 +1190,11 @@
           <p class="beyond-col-body">I mentor designers navigating career transitions — from IC to lead, and from execution to strategic influence.</p>
           <div class="beyond-stats">
             <div>
-              <div class="beyond-stat-n">4.5K</div>
+              <div class="beyond-stat-n" id="ctr-mentored"></div>
               <div class="beyond-stat-l">Minutes Mentored</div>
             </div>
             <div>
-              <div class="beyond-stat-n">Top 20%</div>
+              <div class="beyond-stat-n" id="ctr-rank"></div>
               <div class="beyond-stat-l">Of Mentors Globally</div>
             </div>
           </div>
@@ -1222,6 +1294,139 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
     revEls.forEach(el => obs.observe(el));
+
+    // ── Slot-machine stat counters
+    (function () {
+      // Phase 1: 2.5s fast linear roll through FULL_CYCLES complete 0–9 rotations
+      // Phase 2: 1s cubic ease-out settling on the final digit
+      // Blur fades from 3px → 0px across the full animation
+      const FULL_CYCLES = 1;
+      const FAST_MS     = 1000;
+      const EASE_MS     = 1500;
+      const TOTAL_MS    = FAST_MS + EASE_MS;  // 2500ms
+      const CYCLES_EM   = FULL_CYCLES * 10;   // 10 — shared end point of phase 1
+      const MAX_BLUR    = 3;                   // px
+
+      function makeSlot(targetDigit) {
+        const wrap  = document.createElement('span');
+        wrap.className = 'ctr-digit-wrap';
+        const track = document.createElement('span');
+        track.className = 'ctr-digit-track';
+        // 1 full rotation of 0–9
+        for (let c = 0; c < FULL_CYCLES; c++) {
+          for (let i = 0; i <= 9; i++) {
+            const s = document.createElement('span');
+            s.textContent = i;
+            track.appendChild(s);
+          }
+        }
+        // Final landing: 0 up to targetDigit
+        for (let i = 0; i <= targetDigit; i++) {
+          const s = document.createElement('span');
+          s.textContent = i;
+          track.appendChild(s);
+        }
+        wrap.appendChild(track);
+        wrap._track  = track;
+        wrap._digit  = targetDigit;
+        return wrap;
+      }
+
+      function buildCounter(el, parts) {
+        const ctr = document.createElement('span');
+        ctr.className = 'ctr';
+        const slots = [];
+        for (const p of parts) {
+          if (p.type === 'static') {
+            const s = document.createElement('span');
+            s.textContent = p.v;
+            ctr.appendChild(s);
+          } else {
+            const slot = makeSlot(p.v);
+            ctr.appendChild(slot);
+            slots.push(slot);
+          }
+        }
+        el.appendChild(ctr);
+        return slots;
+      }
+
+      function fire(slots) {
+        const t0 = performance.now();
+
+        function tick(now) {
+          const elapsed = now - t0;
+          const done    = elapsed >= TOTAL_MS;
+          const t       = Math.min(elapsed / TOTAL_MS, 1);
+
+          // Blur: 3px → 0px, decays as (1-t)^1.5 so it clears quickly near the end
+          const blurPx  = (MAX_BLUR * Math.pow(1 - t, 1.5)).toFixed(2);
+
+          slots.forEach(slot => {
+            const { _track: track, _digit: digit } = slot;
+            let pos;
+            if (elapsed < FAST_MS) {
+              // Phase 1 — linear: all slots roll in perfect sync
+              pos = (elapsed / FAST_MS) * CYCLES_EM;
+            } else {
+              // Phase 2 — cubic ease-out: each slot settles to its target
+              const t2    = Math.min((elapsed - FAST_MS) / EASE_MS, 1);
+              const eased = 1 - Math.pow(1 - t2, 3);
+              pos = CYCLES_EM + eased * digit;
+            }
+            track.style.transform = `translateY(-${pos}em)`;
+            slot.style.filter     = `blur(${blurPx}px)`;
+          });
+
+          if (!done) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      const configs = [
+        { id: 'ctr-listeners', parts: [
+          { type: 'digit', v: 5 }, { type: 'static', v: '.' },
+          { type: 'digit', v: 3 }, { type: 'static', v: 'K' },
+        ]},
+        { id: 'ctr-downloads', parts: [
+          { type: 'digit', v: 1 }, { type: 'digit', v: 5 },
+          { type: 'static', v: 'K' },
+        ]},
+        { id: 'ctr-mentored', parts: [
+          { type: 'digit', v: 4 }, { type: 'static', v: '.' },
+          { type: 'digit', v: 5 }, { type: 'static', v: 'K' },
+        ]},
+        { id: 'ctr-rank', parts: [
+          { type: 'static', v: 'Top\u00a0' },
+          { type: 'digit', v: 2 }, { type: 'digit', v: 0 },
+          { type: 'static', v: '%' },
+        ]},
+      ];
+
+      // Build DOM for each counter
+      const allSlots = {};
+      configs.forEach(cfg => {
+        const el = document.getElementById(cfg.id);
+        if (el) allSlots[cfg.id] = buildCounter(el, cfg.parts);
+      });
+
+      // Trigger on scroll
+      let fired = false;
+      const ctrObs = new IntersectionObserver(entries => {
+        if (fired) return;
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            fired = true;
+            ctrObs.disconnect();
+            Object.values(allSlots).forEach(slots => fire(slots));
+          }
+        });
+      }, { threshold: 0.25 });
+
+      const beyondSec = document.getElementById('beyond');
+      if (beyondSec) ctrObs.observe(beyondSec);
+    })();
   </script>
 </body>
 </html>
