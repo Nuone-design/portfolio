@@ -6,76 +6,23 @@
   <title>Nuwan Withanage — Staff Product Designer</title>
   <meta name="description" content="Staff Product Designer with 8+ years designing B2B SaaS products. Systems thinking, AI-forward, shipping with taste." />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/type.css" />
 
   <style>
-    /* ─── Fonts ───────────────────────────────────────────────────── */
-    @font-face {
-      font-family: 'Canela';
-      src: url('assets/Font/Canela-Black-Trial.otf') format('opentype');
-      font-weight: 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Canela';
-      src: url('assets/Font/Canela-BlackItalic-Trial.otf') format('opentype');
-      font-weight: 900;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Sohne';
-      src: url('assets/Font/TestSohne-Extraleicht-BF663d89cd3f5c5.otf') format('opentype');
-      font-weight: 200;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Sohne';
-      src: url('assets/Font/TestSohne-Leicht-BF663d89cd4952e.otf') format('opentype');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Sohne';
-      src: url('assets/Font/TestSohne-LeichtKursiv-BF663d89cd9a361.otf') format('opentype');
-      font-weight: 300;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Sohne';
-      src: url('assets/Font/TestSohne-Buch-BF663d89cd32e6a.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Sohne';
-      src: url('assets/Font/TestSohne-BuchKursiv-BF663d89cd3e887.otf') format('opentype');
-      font-weight: 400;
-      font-style: italic;
-      font-display: swap;
-    }
-
     /* ─── Tokens ──────────────────────────────────────────────────── */
     :root {
-      --bg:         #080808;
-      --surface:    #111111;
-      --surface-2:  #161616;
-      --border:     #1e1e1e;
-      --text:       #f0f0f0;
-      --text-muted: #888888;
-      --text-mid:   #b0b0b0;
-      --accent:     #c8ff00;
-      --font-sans:  'Sohne', sans-serif;
-      --font-mono:  'DM Mono', monospace;
-      --pad-x:      clamp(24px, 5vw, 80px);
-      --max-w:      1360px;
+      --bg:          #080808;
+      --surface:     #111111;
+      --surface-2:   #161616;
+      --border:      #1e1e1e;
+      --text:        #f0f0f0;
+      --text-muted:  #888888;
+      --text-mid:    #b0b0b0;
+      --accent:      #c8ff00;
+      --font-display: 'Canela', Georgia, serif;
+      --font-sans:   'Saans', Helvetica, sans-serif;
+      --pad-x:       clamp(24px, 5vw, 80px);
+      --max-w:       1360px;
     }
 
     /* ─── Reset ───────────────────────────────────────────────────── */
@@ -111,16 +58,18 @@
       visibility: hidden;
     }
     #loader-count {
-      font-size: clamp(80px, 18vw, 200px);
-      font-weight: 200;
+      font-size: var(--text-display);
+      font-weight: 100;
+      font-family: var(--font-display);
       letter-spacing: -0.04em;
       line-height: 1;
       color: var(--text);
       font-variant-numeric: tabular-nums;
     }
     #loader-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -159,9 +108,9 @@
       padding: 0 var(--pad-x);
     }
     .mono {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 400;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
@@ -200,8 +149,9 @@
       justify-content: space-between;
     }
     .nav-logo {
-      font-family: var(--font-mono);
-      font-size: 13px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.06em;
       color: var(--text);
     }
@@ -216,8 +166,9 @@
       list-style: none;
     }
     .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -225,8 +176,9 @@
     }
     .nav-links a:hover { color: var(--text); }
     .nav-cta {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--accent);
@@ -324,10 +276,10 @@
       flex-direction: column;
       align-items: center;
       gap: 0;
-      font-family: 'Canela', serif;
-      font-size: clamp(72px, 12vw, 160px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
+      font-family: var(--font-display);
+      font-size: var(--text-display);
+      font-weight: 100;
+      letter-spacing: -0.03em;
       line-height: 0.92;
       color: var(--text);
     }
@@ -348,15 +300,16 @@
 
     /* Tagline */
     .hero-tagline {
-      font-size: 16px;
-      font-weight: 300;
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
       color: var(--text-muted);
-      line-height: 1.7;
+      line-height: 1.65;
       text-align: center;
       max-width: 420px;
       opacity: 0;
       transform: translateY(24px);
-      letter-spacing: 0.01em;
+      letter-spacing: 0;
     }
     #hero.hero-ready .hero-tagline {
       animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
@@ -382,8 +335,9 @@
       gap: 10px;
     }
     .hero-scroll-indicator span {
-      font-family: var(--font-mono);
-      font-size: 10px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -417,8 +371,9 @@
       align-items: center;
       gap: 32px;
       padding: 0 32px;
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -449,10 +404,11 @@
     }
 
     h2.section-heading {
-      font-size: clamp(36px, 5vw, 64px);
-      font-weight: 200;
-      letter-spacing: -0.03em;
-      line-height: 1;
+      font-family: var(--font-display);
+      font-size: var(--text-heading);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
       color: var(--text);
     }
 
@@ -509,9 +465,11 @@
     .wc-num {
       position: absolute;
       top: 12px; left: 14px;
-      font-family: var(--font-mono);
-      font-size: 10px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: .1em;
+      text-transform: uppercase;
       color: var(--text-muted);
       z-index: 1;
     }
@@ -520,16 +478,18 @@
     .wc-body { display: flex; flex-direction: column; gap: 12px; }
 
     .wc-title {
-      font-size: 26px;
-      font-weight: 300;
-      letter-spacing: -.02em;
-      line-height: 1.1;
+      font-family: var(--font-sans);
+      font-size: var(--text-subheading);
+      font-weight: 500;
+      letter-spacing: -.01em;
+      line-height: 1.2;
       color: var(--text);
     }
 
     .wc-desc {
-      font-size: 15px;
-      font-weight: 300;
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
       line-height: 1.65;
       color: var(--text-mid);
     }
@@ -550,8 +510,9 @@
     }
 
     .wc-tag {
-      font-family: var(--font-mono);
-      font-size: 9px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -589,8 +550,9 @@
     }
 
     .principle-n {
-      font-family: var(--font-mono);
-      font-size: 10px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -598,10 +560,11 @@
     }
 
     .principle-h {
-      font-size: 20px;
-      font-weight: 300;
+      font-family: var(--font-sans);
+      font-size: var(--text-subheading);
+      font-weight: 500;
       letter-spacing: -0.01em;
-      line-height: 1.25;
+      line-height: 1.2;
       color: var(--text);
       margin-bottom: 20px;
     }
@@ -612,9 +575,11 @@
     }
 
     .principle-p {
-      font-size: 15px;
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
       color: var(--text-mid);
-      line-height: 1.75;
+      line-height: 1.65;
     }
 
     /* ─── About ───────────────────────────────────────────────────── */
@@ -632,8 +597,9 @@
     .about-left { padding-top: 6px; }
 
     .about-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -647,15 +613,18 @@
     }
 
     .about-meta span {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--text-muted);
     }
 
     .about-right p {
-      font-size: clamp(18px, 2.2vw, 24px);
-      font-weight: 300;
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
       line-height: 1.65;
       color: var(--text-mid);
       margin-bottom: 32px;
@@ -697,25 +666,28 @@
     .beyond-col:first-child { border-right: 1px solid var(--border); }
 
     .beyond-col-sub {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--text-muted);
     }
 
     .beyond-col-title {
-      font-size: 28px;
-      font-weight: 300;
-      letter-spacing: -.02em;
+      font-family: var(--font-sans);
+      font-size: var(--text-subheading);
+      font-weight: 500;
+      letter-spacing: -.01em;
       color: var(--text);
-      line-height: 1.1;
+      line-height: 1.2;
     }
 
     .beyond-col-body {
-      font-size: 15px;
-      font-weight: 300;
-      line-height: 1.7;
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
+      line-height: 1.65;
       color: var(--text-mid);
     }
 
@@ -726,7 +698,8 @@
     }
 
     .beyond-stat-n {
-      font-size: 48px;
+      font-family: var(--font-display);
+      font-size: var(--text-heading);
       font-weight: 300;
       letter-spacing: -.03em;
       line-height: 1;
@@ -735,8 +708,9 @@
     }
 
     .beyond-stat-l {
-      font-family: var(--font-mono);
-      font-size: 10px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -763,8 +737,9 @@
     }
 
     .beyond-link {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -783,10 +758,11 @@
     }
 
     .cta-quote {
-      font-size: clamp(28px, 4.5vw, 60px);
-      font-weight: 200;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
+      font-family: var(--font-display);
+      font-size: var(--text-heading);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
       color: var(--text);
       max-width: 900px;
       margin-bottom: 64px;
@@ -804,9 +780,9 @@
       display: inline-flex;
       align-items: center;
       gap: 14px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 400;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 18px 32px;
@@ -845,8 +821,9 @@
     }
 
     .footer-copy {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.06em;
       color: var(--text-muted);
     }
@@ -857,8 +834,9 @@
       list-style: none;
     }
     .footer-links a {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-family: var(--font-sans);
+      font-size: var(--text-label);
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-muted);
@@ -874,12 +852,10 @@
       nav { padding: 20px 0; }
       .nav-links { display: none; }
 
-      /* Loader */
-      #loader-count { font-size: 20vw; }
+      /* Loader — font-size handled by var(--text-display) clamp */
 
       /* Hero */
       #hero { padding: 80px 24px 72px; }
-      h1.hero-name { font-size: clamp(56px, 14vw, 120px); }
       .hero-glow { width: 100vw; height: 60vw; }
 
       /* Marquee — prevent overflow */
@@ -904,7 +880,6 @@
 
       /* About */
       .about-grid { grid-template-columns: 1fr; gap: 32px; }
-      .about-right p { font-size: 17px; }
 
       /* Beyond Work */
       #beyond { padding: 64px 0; }
@@ -924,8 +899,6 @@
       /* Tighter padding on very small screens */
       #hero { padding: 60px 20px 64px; }
       #work, #how, #about, #cta { padding: 48px 0; }
-      h1.hero-name { font-size: clamp(48px, 15vw, 96px); }
-      .hero-tagline { font-size: 15px; }
       .hero-glow { width: 100vw; height: 80vw; }
 
       /* Work section header */
@@ -938,6 +911,7 @@
 
       /* Hero actions — stack */
       .hero-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .about-right p { font-size: var(--text-body); }
 
       /* Buttons */
       .btn { width: 100%; justify-content: space-between; }

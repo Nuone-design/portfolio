@@ -1,0 +1,127 @@
+/* ─────────────────────────────────────────────────────────────────
+   TYPE SYSTEM
+   Canela (display serif) + Saans (UI sans-serif)
+   Paths are relative to this file: assets/css/type.css
+   Fonts live at: public/fonts/
+───────────────────────────────────────────────────────────────── */
+
+/* ─── Canela — Display Serif ──────────────────────────────────── */
+@font-face {
+  font-family: 'Canela';
+  src: url('../../public/fonts/Canela-Thin-Trial.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('../../public/fonts/Canela-Light-Trial.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('../../public/fonts/Canela-Regular-Trial.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Saans — UI Sans-Serif ───────────────────────────────────── */
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-RegularItalic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-MediumItalic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saans';
+  src: url('../../public/fonts/Saans-TRIAL-SemiBoldItalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ─── Scale & Family Tokens ───────────────────────────────────── */
+:root {
+  --font-display:    'Canela', Georgia, serif;
+  --font-sans:       'Saans', Helvetica, sans-serif;
+
+  --text-display:    clamp(64px, 10vw, 140px);   /* Hero name       */
+  --text-heading:    clamp(36px, 5vw, 64px);      /* Section titles  */
+  --text-subheading: clamp(20px, 2.5vw, 28px);    /* Project titles  */
+  --text-body:       clamp(15px, 1.2vw, 17px);    /* Paragraphs      */
+  --text-label:      clamp(10px, 0.9vw, 12px);    /* Tags, nav, meta */
+}
+
+/* ─── Utility Classes ─────────────────────────────────────────── */
+.text-display {
+  font-family: var(--font-display);
+  font-size:   var(--text-display);
+  font-weight: 100;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.text-heading {
+  font-family: var(--font-display);
+  font-size:   var(--text-heading);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.text-subheading {
+  font-family: var(--font-sans);
+  font-size:   var(--text-subheading);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-size:   var(--text-body);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+.text-label {
+  font-family:    var(--font-sans);
+  font-size:      var(--text-label);
+  font-weight:    600;
+  line-height:    1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
