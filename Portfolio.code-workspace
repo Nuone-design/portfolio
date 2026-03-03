@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "Portfolio",
+			"path": "."
+		},
+		{
+			"name": "Canela_Collection",
+			"path": "../Downloads/Canela_Collection"
+		},
+		{
+			"name": "sohne-font-family",
+			"path": "../Downloads/sohne-font-family"
+		}
+	],
+	"settings": {}
+}
