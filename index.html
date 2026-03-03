@@ -384,6 +384,26 @@
       50%       { transform: scaleY(1.3); opacity: 1;   }
     }
 
+    /* Rocket SVG on scroll indicator */
+    .scroll-rocket {
+      width: 12px;
+      height: 16px;
+      color: rgba(255, 255, 255, 0.38);
+      flex-shrink: 0;
+      animation: rocket-launch 2.8s ease-in-out infinite;
+    }
+    @keyframes rocket-launch {
+      0%   { opacity: 0;    transform: translateY(0); }
+      10%  { opacity: 0.9;  transform: translateY(0); }
+      78%  { opacity: 0.85; transform: translateY(-80px); }
+      94%  { opacity: 0;    transform: translateY(-80px); }
+      95%  { opacity: 0;    transform: translateY(0); }
+      100% { opacity: 0;    transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-rocket { animation: none; opacity: 0.35; }
+    }
+
     /* ─── Marquee ─────────────────────────────────────────────────── */
     #marquee {
       overflow: hidden;
@@ -1008,6 +1028,12 @@
 
     <div class="hero-footer">
       <div class="hero-scroll-indicator">
+        <svg class="scroll-rocket" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 0 C3.5 3 2.5 6.5 2.5 9 L9.5 9 C9.5 6.5 8.5 3 6 0 Z" fill="currentColor"/>
+          <path d="M2.5 9 L0.5 13.5 L4 10.5 Z" fill="currentColor" opacity="0.65"/>
+          <path d="M9.5 9 L11.5 13.5 L8 10.5 Z" fill="currentColor" opacity="0.65"/>
+          <path d="M4 10.5 L5.2 14.5 L6 12.5 L6.8 14.5 L8 10.5 Z" fill="currentColor" opacity="0.4"/>
+        </svg>
         <div class="scroll-line"></div>
         <span>Scroll</span>
       </div>
@@ -1434,6 +1460,37 @@
 
       const beyondSec = document.getElementById('beyond');
       if (beyondSec) ctrObs.observe(beyondSec);
+    })();
+
+    // ── Effect 1: Scroll blur + fade on hero-center ────────────────────
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const heroCenter = document.querySelector('.hero-center');
+      if (!heroCenter) return;
+
+      let ticking = false;
+
+      function applyScrollEffect() {
+        const scrollY  = window.scrollY || window.pageYOffset;
+        const progress = Math.min(scrollY / 300, 1);
+
+        const blur      = (progress * 12).toFixed(2);
+        const opacity   = (1 - progress).toFixed(3);
+        const scaleX    = (1 + progress * 0.04).toFixed(4);
+        const tY        = (progress * -30).toFixed(2);
+
+        heroCenter.style.filter    = `blur(${blur}px)`;
+        heroCenter.style.opacity   = opacity;
+        heroCenter.style.transform = `scaleX(${scaleX}) translateY(${tY}px)`;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(applyScrollEffect);
+          ticking = true;
+        }
+      }, { passive: true });
     })();
   </script>
 </body>
