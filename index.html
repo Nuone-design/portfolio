@@ -386,8 +386,8 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 12px;
-      height: 16px;
+      width: 11px;
+      height: 14px;
       color: rgba(255, 255, 255, 0.45);
       animation: rocket-launch 2.8s ease-in-out infinite;
     }
@@ -1056,10 +1056,14 @@
       <div class="hero-scroll-indicator">
         <div class="scroll-launch-zone">
           <svg class="scroll-rocket" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 0 C3.5 3 2.5 6.5 2.5 9 L9.5 9 C9.5 6.5 8.5 3 6 0 Z" fill="currentColor"/>
-            <path d="M2.5 9 L0.5 13.5 L4 10.5 Z" fill="currentColor" opacity="0.65"/>
-            <path d="M9.5 9 L11.5 13.5 L8 10.5 Z" fill="currentColor" opacity="0.65"/>
-            <path d="M4 10.5 L5.2 14.5 L6 12.5 L6.8 14.5 L8 10.5 Z" fill="currentColor" opacity="0.4"/>
+            <!-- Slim bullet body + nose -->
+            <path d="M6 0 C5.1 1.8 4.5 4.5 4.5 11 L7.5 11 C7.5 4.5 6.9 1.8 6 0 Z" fill="currentColor"/>
+            <!-- Left swept fin -->
+            <path d="M4.5 8.5 L2 13.5 L4.5 11 Z" fill="currentColor" opacity="0.7"/>
+            <!-- Right swept fin -->
+            <path d="M7.5 8.5 L10 13.5 L7.5 11 Z" fill="currentColor" opacity="0.7"/>
+            <!-- Narrow nozzle exhaust -->
+            <path d="M5 11 L5.4 15 L6 13.5 L6.6 15 L7 11 Z" fill="currentColor" opacity="0.4"/>
           </svg>
           <div class="scroll-smoke"></div>
         </div>
