@@ -310,9 +310,40 @@
       opacity: 0;
       transform: translateY(24px);
       letter-spacing: 0;
+      position: relative;
     }
     #hero.hero-ready .hero-tagline {
       animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
+    }
+
+    /* Ambient glow behind tagline */
+    .hero-tagline::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140%;
+      height: 260%;
+      background: radial-gradient(ellipse at 50% 60%,
+        rgba(210, 220, 255, 0.07) 0%,
+        rgba(180, 190, 255, 0.04) 35%,
+        transparent 70%
+      );
+      filter: blur(18px);
+      pointer-events: none;
+      z-index: -1;
+      animation: glow-breathe 7s ease-in-out infinite;
+    }
+
+    @keyframes glow-breathe {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(0.96) translateY(2px); }
+      50%  { opacity: 1;   transform: translate(-50%, -50%) scale(1.04) translateY(-2px); }
+      100% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.96) translateY(2px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-tagline::before { animation: none; }
     }
 
     /* Scroll indicator — bottom center */
