@@ -6,136 +6,356 @@
   <title>Picking app: Designing for speed — Nuwan Withanage</title>
   <link rel="stylesheet" href="../assets/css/type.css" />
   <style>
+    /* ─── Tokens ─────────────────────────────────────────── */
     :root {
-      --bg: #080808; --surface: #111111; --surface-2: #161616;
-      --border: #1e1e1e; --text: #f0f0f0; --text-muted: #888888;
-      --text-mid: #b0b0b0; --accent: #c8ff00;
-      --font-display: 'Canela', Georgia, serif;
-      --font-sans: 'Saans', Helvetica, sans-serif;
-      --pad-x: clamp(24px, 5vw, 80px);
+      --bg:             #080808;
+      --border:         #1e1e1e;
+      --text:           #f0f0f0;
+      --text-muted:     #888888;
+      --text-mid:       #b0b0b0;
+      --accent:         #c8ff00;
+      --page-padding:   clamp(24px, 6vw, 120px);
+      --space-section:  clamp(80px, 12vw, 160px);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-weight: 400; font-size: var(--text-body); line-height: 1.65; cursor: none; overflow-x: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: var(--text-body);
+      line-height: 1.65;
+      cursor: none;
+      overflow-x: hidden;
+    }
     a { color: inherit; text-decoration: none; }
-    img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    #c-dot, #c-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: difference; }
-    #c-dot { width: 8px; height: 8px; background: var(--text); }
-    #c-ring { width: 32px; height: 32px; border: 1px solid rgba(240,240,240,0.5); transition: width .2s, height .2s; }
+    /* ─── Cursor ─────────────────────────────────────────── */
+    #c-dot, #c-ring {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+    #c-dot  { width: 8px;  height: 8px;  background: var(--text); }
+    #c-ring {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(240,240,240,0.5);
+    }
 
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 0; transition: padding .4s, background .4s, backdrop-filter .4s; }
-    nav.blur { padding: 18px 0; background: rgba(8,8,8,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-    .wrap { max-width: 1360px; margin: 0 auto; padding: 0 var(--pad-x); }
-    nav .wrap { display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .06em; color: var(--text); }
-    .nav-back { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); display: inline-flex; align-items: center; gap: 10px; transition: color .2s, gap .2s; }
+    /* ─── Nav ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 28px 0;
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out,
+                  padding 0.4s, background 0.4s, backdrop-filter 0.4s,
+                  -webkit-backdrop-filter 0.4s;
+    }
+    nav.blur {
+      padding: 18px 0;
+      background: rgba(8,8,8,.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--page-padding);
+    }
+    .nav-logo {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .06em; color: var(--text);
+    }
+    .nav-back {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 10px;
+      transition: color .2s, gap .2s;
+    }
     .nav-back:hover { color: var(--text); gap: 16px; }
 
-    .r { opacity: 0; transform: translateY(20px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
-    .r.on { opacity: 1; transform: none; }
-    .r-d1 { transition-delay: .1s; } .r-d2 { transition-delay: .2s; }
+    /* ══════════════════════════════════════════════════════
+       SECTION 1 — PROJECT HEADER
+    ══════════════════════════════════════════════════════ */
+    .proj-header {
+      padding: clamp(120px, 15vw, 180px) var(--page-padding) 80px;
+      border-bottom: 1px solid var(--border);
+    }
 
-    .cs-header { padding-top: 140px; padding-bottom: 80px; border-bottom: 1px solid var(--border); }
-    .cs-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
-    .cs-meta-tag { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
-    .cs-meta-sep { color: var(--border); }
-    .cs-title { font-family: var(--font-display); font-size: var(--text-display); font-weight: 100; letter-spacing: -.03em; line-height: .92; color: var(--text); margin-bottom: 64px; }
-    .cs-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .cs-summary { font-family: var(--font-sans); font-size: var(--text-body); font-weight: 400; line-height: 1.65; color: var(--text-mid); }
-    .cs-summary strong { color: var(--text); font-weight: 400; }
-    .cs-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); align-self: start; }
-    .cs-stat { background: var(--bg); padding: 28px 24px; }
-    .cs-stat-n { font-family: var(--font-display); font-size: var(--text-heading); font-weight: 300; letter-spacing: -.03em; color: var(--text); line-height: 1; margin-bottom: 6px; }
-    .cs-stat-n sup { font-size: 14px; }
-    .cs-stat-l { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+    .proj-meta {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
+    }
+    .proj-meta-item {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .proj-meta-sep { color: var(--border); }
 
-    .img-section { padding: 80px 0; border-bottom: 1px solid var(--border); }
-    .img-hero { width: 100%; height: clamp(320px, 55vw, 700px); overflow: hidden; position: relative; }
-    .img-hero img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
-    .img-hero:hover img { transform: scale(1.04); }
+    /* Title — uses .text-display utility (line-height 0.92, tracking -0.03em) */
+    .proj-title {
+      max-width: 700px;
+      color: var(--text);
+      margin-bottom: clamp(40px, 6vw, 64px);
+    }
 
-    .bento { display: grid; gap: 12px; margin-top: 12px; }
-    .bento-2 { grid-template-columns: 1fr 1fr; }
-    .bento-3 { grid-template-columns: 2fr 1fr 1fr; }
-    .bento-3b { grid-template-columns: 1fr 1fr 2fr; }
-    .bento-asym { grid-template-columns: 3fr 2fr; }
+    /* 55 / 45 intro grid */
+    .proj-intro {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      column-gap: clamp(60px, 8vw, 140px);
+      align-items: start;
+    }
 
-    .img-cell { overflow: hidden; position: relative; background: var(--surface); }
-    .img-cell.tall { height: clamp(240px, 35vw, 480px); }
-    .img-cell.medium { height: clamp(200px, 26vw, 360px); }
-    .img-cell.short { height: clamp(160px, 20vw, 280px); }
+    .proj-desc {
+      max-width: 520px;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .proj-desc strong { color: var(--text); font-weight: 400; }
 
-    .img-cell img { will-change: transform; transition: transform .6s cubic-bezier(.16,1,.3,1); }
-    .img-cell:hover img { transform: scale(1.06); }
-    .img-cell.r img { transform: scale(1.08); }
-    .img-cell.r.on img { transform: scale(1); }
-    .img-cell:hover img { transform: scale(1.06) !important; }
+    /* Metrics — stacked with gap, differentiated sizes */
+    .proj-metrics { display: flex; flex-direction: column; gap: 32px; }
 
-    .img-caption { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 20px; }
+    .proj-metric-n--primary {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 300; letter-spacing: -.02em; line-height: 1;
+      color: var(--accent);
+    }
+    .proj-metric-n--secondary {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 300; letter-spacing: -.02em; line-height: 1;
+      color: var(--text);
+    }
+    .proj-metric-n--secondary .accent { color: var(--accent); }
+    .proj-metric-l {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted); margin-top: 4px;
+    }
 
-    .text-section { padding: 96px 0; border-bottom: 1px solid var(--border); }
-    .text-grid { display: grid; grid-template-columns: 220px 1fr; gap: 80px; }
-    .text-label { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); padding-top: 6px; }
-    .text-body p { font-family: var(--font-sans); font-size: var(--text-body); font-weight: 400; line-height: 1.65; color: var(--text-mid); margin-bottom: 24px; }
-    .text-body p:last-child { margin-bottom: 0; }
-    .text-body strong { color: var(--text); font-weight: 400; }
+    /* ══════════════════════════════════════════════════════
+       SECTION 2 — HERO IMAGE
+    ══════════════════════════════════════════════════════ */
+    .hero-img {
+      width: 100%;
+      background: var(--bg);
+      padding: 48px 0;
+    }
+    .hero-img img {
+      display: block; width: 100%; height: 70vh;
+      object-fit: contain;
+    }
 
-    .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--border); transition: padding .3s; }
-    .next-project:hover { padding-left: 20px; }
-    .next-label { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-    .next-name { font-family: var(--font-display); font-size: var(--text-heading); font-weight: 300; letter-spacing: -.02em; color: var(--text); }
-    .next-arrow { font-size: 32px; color: var(--text-muted); transition: transform .3s, color .3s; }
-    .next-project:hover .next-arrow { transform: translate(8px,-8px); color: var(--accent); }
+    /* ══════════════════════════════════════════════════════
+       SECTION 3 — CONTEXT BLOCK
+    ══════════════════════════════════════════════════════ */
+    .context-block {
+      padding: clamp(80px, 10vw, 140px) var(--page-padding);
+    }
+    .context-inner { max-width: min(640px, 80vw); }
+    .context-inner p {
+      font-family: var(--font-sans); font-size: var(--text-body);
+      font-weight: 400; line-height: 1.75; color: var(--text-mid);
+    }
+    .context-inner strong { color: var(--text); font-weight: 400; }
 
-    footer { border-top: 1px solid var(--border); padding: 32px 0; }
-    .footer-inner { display: flex; align-items: center; justify-content: space-between; }
-    .footer-copy { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .06em; color: var(--text-muted); }
+    /* ══════════════════════════════════════════════════════
+       SECTION 4 — DUAL BLOCK
+    ══════════════════════════════════════════════════════ */
+    .dual-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .dual-left,
+    .dual-right {
+      height: 65vh;
+      overflow: hidden;
+      position: relative;
+    }
+    .dual-left video {
+      display: block; width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .dual-right img {
+      display: block; width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .dual-caption {
+      padding: 16px var(--page-padding) 0;
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SECTION 5 — IMPACT ROW
+    ══════════════════════════════════════════════════════ */
+    .impact-row {
+      margin-top: var(--space-section);
+      padding: clamp(60px, 7vw, 80px) clamp(64px, 8vw, 120px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .impact-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .impact-item {
+      display: flex; flex-direction: column;
+    }
+    .impact-divider {
+      width: 1px; height: 48px;
+      background: rgba(255,255,255,0.1);
+      align-self: center;
+      flex-shrink: 0;
+    }
+    .impact-n {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 300; letter-spacing: -.02em; line-height: 1;
+      color: var(--text);
+    }
+    .impact-n--accent { color: var(--accent); }
+    .impact-n sup {
+      font-size: 0.4em; vertical-align: super; letter-spacing: 0;
+    }
+    .impact-l {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted); margin-top: 8px;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px var(--page-padding);
+      margin-top: var(--space-section);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .06em; color: var(--text-muted);
+    }
     .footer-links { display: flex; gap: 28px; list-style: none; }
-    .footer-links a { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); transition: color .2s; }
+    .footer-links a {
+      font-family: var(--font-sans); font-size: var(--text-label);
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted); transition: color .2s;
+    }
     .footer-links a:hover { color: var(--text); }
 
+    /* ══════════════════════════════════════════════════════
+       ANIMATION SYSTEM
+       All values in CSS. JS only adds: body.loaded, .is-visible
+    ══════════════════════════════════════════════════════ */
+
+    /* PAGE LOAD — initial hidden states */
+    @media (prefers-reduced-motion: no-preference) {
+      nav {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      .proj-meta {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out 0.3s, transform 0.6s ease-out 0.3s;
+      }
+      .proj-title {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out 0.1s, transform 0.8s ease-out 0.1s;
+      }
+      .proj-intro {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out 0.3s, transform 0.6s ease-out 0.3s;
+      }
+
+      /* PAGE LOAD — visible state (JS adds body.loaded) */
+      body.loaded nav    { opacity: 1; transform: none; }
+      body.loaded .proj-meta  { opacity: 1; transform: none; }
+      body.loaded .proj-title { opacity: 1; transform: none; }
+      body.loaded .proj-intro { opacity: 1; transform: none; }
+
+      /* SCROLL — initial hidden states */
+      .sr {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sr-hero {
+        opacity: 0;
+        transform: none;
+        transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sr-ctx {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sr-dual {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+        transform-origin: center top;
+        transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sr-metric {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transition-delay: calc(var(--i, 0) * 0.1s);
+      }
+
+      /* SCROLL — visible state (JS adds .is-visible) */
+      .sr.is-visible,
+      .sr-hero.is-visible,
+      .sr-ctx.is-visible,
+      .sr-dual.is-visible,
+      .sr-metric.is-visible {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ─── Responsive ─────────────────────────────────────── */
     @media (max-width: 900px) {
-      /* Nav */
-      nav { padding: 20px 0; }
+      .proj-header { padding-top: clamp(96px, 12vw, 120px); padding-bottom: 48px; }
+      .proj-title  { margin-bottom: clamp(28px, 5vw, 40px); }
+      .proj-intro  { grid-template-columns: 1fr; gap: clamp(32px, 5vw, 48px); }
 
-      /* Header */
-      .cs-header { padding-top: 96px; padding-bottom: 48px; }
-      .cs-intro { grid-template-columns: 1fr; gap: 36px; }
-      .cs-stats { grid-template-columns: 1fr 1fr; }
+      .hero-img img { height: 55vw; }
 
-      /* Images */
-      .bento-2, .bento-3, .bento-3b, .bento-asym { grid-template-columns: 1fr; }
-      .img-cell.tall  { height: clamp(200px, 56vw, 340px); }
-      .img-cell.medium { height: clamp(180px, 48vw, 300px); }
-      .img-hero { height: clamp(200px, 56vw, 360px); }
+      .dual-block  { grid-template-columns: 1fr; gap: 2px; }
+      .dual-left, .dual-right { height: 56vw; }
 
-      /* Text sections */
-      .text-section { padding: 56px 0; }
-      .text-grid { grid-template-columns: 1fr; gap: 20px; }
-      /* font-size handled by var(--text-body) clamp */
+      .impact-row  { padding-left: var(--page-padding); padding-right: var(--page-padding); }
+      .impact-grid { flex-direction: column; align-items: flex-start; gap: 0; }
+      .impact-item { padding: clamp(20px, 4vw, 28px) 0; border-bottom: 1px solid var(--border); width: 100%; }
+      .impact-item:last-child { border-bottom: none; }
+      .impact-divider { display: none; }
 
-      /* Pull quotes */
-      .pull-quote { padding: 48px 0; }
-      .pull-quote blockquote { padding-left: 20px; font-size: clamp(18px, 5vw, 32px); }
-
-      /* Next project */
-      .next-project { padding: 40px 0; }
-      .next-project:hover { padding-left: 0; }
-      /* next-name font-size handled by var(--text-heading) clamp */
-
-      /* Footer */
       .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
     }
 
     @media (max-width: 480px) {
-      .cs-header { padding-top: 80px; padding-bottom: 36px; }
-      .cs-stats { gap: 1px; }
-      .cs-stat { padding: 16px; }
-      /* cs-stat-n font-size handled by var(--text-heading) clamp */
-      .text-section { padding: 40px 0; }
-      .img-hero { height: 52vw; }
-      .img-cell.tall, .img-cell.medium { height: 56vw; }
+      .proj-header { padding-top: 80px; }
+      .hero-img img { height: 64vw; }
+      .dual-left, .dual-right { height: 70vw; }
+      .context-block { padding-top: clamp(60px, 10vw, 80px); padding-bottom: clamp(60px, 10vw, 80px); }
     }
   </style>
 </head>
@@ -145,197 +365,155 @@
   <div id="c-ring" aria-hidden="true"></div>
 
   <nav id="nav">
-    <div class="wrap">
+    <div class="nav-inner">
       <a href="/" class="nav-logo">NW</a>
       <a href="/" class="nav-back"><span>←</span> All work</a>
     </div>
   </nav>
 
-  <header class="cs-header">
-    <div class="wrap">
-      <div class="cs-meta r">
-        <span class="cs-meta-tag">AI-Powered Workflow Tool</span>
-        <span class="cs-meta-sep">·</span>
-        <span class="cs-meta-tag">Product Strategy</span>
-        <span class="cs-meta-sep">·</span>
-        <span class="cs-meta-tag">2023 – 2024</span>
-      </div>
-      <h1 class="cs-title r r-d1">Picking app: Designing for speed</h1>
-      <div class="cs-intro">
-        <p class="cs-summary r r-d1">
-          An AI-native workflow tool for operations teams. Built in a high-ambiguity environment with a founding team of six. <strong>I led design from the first whiteboard session through public launch</strong> — shaping product strategy, navigating AI UX patterns, and building trust with non-technical users who were deeply sceptical of automation.
-        </p>
-        <div class="cs-stats r r-d2">
-          <div class="cs-stat">
-            <div class="cs-stat-n">0<span style="color:var(--accent)">→</span>1</div>
-            <div class="cs-stat-l">Full product design</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">60<sup>%</sup></div>
-            <div class="cs-stat-l">Onboarding improvement</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">4.8</div>
-            <div class="cs-stat-l">App store rating</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">12<sup>mo</sup></div>
-            <div class="cs-stat-l">Seed to launch</div>
-          </div>
+  <!-- ════ SECTION 1 — PROJECT HEADER ════ -->
+  <header class="proj-header">
+
+    <div class="proj-meta">
+      <span class="proj-meta-item">Warehouse Tech</span>
+      <span class="proj-meta-sep">/</span>
+      <span class="proj-meta-item">2024</span>
+      <span class="proj-meta-sep">/</span>
+      <span class="proj-meta-item">Lead Product Designer</span>
+    </div>
+
+    <h1 class="proj-title text-display">Picking app:<br>Designing for speed</h1>
+
+    <div class="proj-intro">
+      <p class="proj-desc">
+        Warehouse pickers navigate a handheld device for hours a day — routing, scanning, confirming. <strong>Every second of friction compounds across thousands of picks a shift.</strong> I designed the Picking app from zero to launch: faster routing, fewer taps, clearer feedback, and a UI built for glance-and-go use in a loud, physical environment.
+      </p>
+
+      <div class="proj-metrics">
+        <div class="proj-metric">
+          <div class="proj-metric-n--primary">60%</div>
+          <div class="proj-metric-l">Faster pick time</div>
+        </div>
+        <div class="proj-metric">
+          <div class="proj-metric-n--secondary">4.8</div>
+          <div class="proj-metric-l">App store rating</div>
+        </div>
+        <div class="proj-metric">
+          <div class="proj-metric-n--secondary">0<span class="accent">→</span>1</div>
+          <div class="proj-metric-l">Full product design</div>
         </div>
       </div>
     </div>
+
   </header>
 
-  <!-- Hero image -->
-  <div class="img-section">
-    <div class="wrap">
-      <div class="img-hero r">
-        <img src="../assets/images/PA_Main.png" alt="Picking app interface" data-parallax="0.15" />
-      </div>
-      <p class="img-caption r">Loops interface — AI suggestion layer on top of manual workflow</p>
-    </div>
-  </div>
+  <!-- ════ SECTION 2 — HERO IMAGE ════ -->
+  <section class="hero-img sr-hero">
+    <img src="../assets/images/PA_Main.png" alt="Picking app main interface" />
+  </section>
 
-  <!-- Problem -->
-  <div class="text-section">
-    <div class="wrap">
-      <div class="text-grid">
-        <div class="text-label r">The Problem</div>
-        <div class="text-body">
-          <p class="r">Operations teams run on repetition. The same approval chains, the same routing logic, the same exception handling — hundreds of times a week. The opportunity was clear: <strong>use AI to handle the pattern recognition, let humans handle the exceptions</strong>.</p>
-          <p class="r r-d1">The challenge was trust. These users had been burned by automation before — by tools that broke silently, gave no explanation, and left them holding the consequences. Making AI feel reliable, not reckless, was the central design problem.</p>
-        </div>
-      </div>
+  <!-- ════ SECTION 3 — CONTEXT BLOCK ════ -->
+  <section class="context-block">
+    <div class="context-inner sr-ctx">
+      <p>
+        The Picking app is a native mobile tool for warehouse operatives working in high-volume fulfilment centres. Workers scan hundreds of items per shift through dense product catalogues under constant time pressure. <strong>The previous tool was a desktop admin panel ported to mobile</strong> — every interaction designed for someone sitting at a desk, not moving at pace across a warehouse floor. The brief was simple: close that gap.
+      </p>
     </div>
-  </div>
+  </section>
 
-  <!-- Images — bento -->
-  <div class="img-section">
-    <div class="wrap">
-      <div class="bento bento-asym r">
-        <div class="img-cell tall" style="height:600px; display:flex; align-items:center; justify-content:center; background:#0d0d0d;">
-          <video src="../assets/images/picking-animation.mov" autoplay muted loop playsinline style="height:100%;width:auto;display:block;"></video>
-        </div>
-        <div class="img-cell tall" style="height:600px; background:#E5ECEA;">
-          <img src="../assets/images/PA_2nd.png" alt="Picking app secondary view" data-parallax="0.18" />
-        </div>
-      </div>
-      <p class="img-caption r">AI suggestion panel with confidence indicators and override controls</p>
+  <!-- ════ SECTION 4 — DUAL BLOCK ════ -->
+  <section class="dual-block">
+    <div class="dual-left sr-dual">
+      <video src="../assets/images/picking-animation.mov" autoplay muted loop playsinline></video>
     </div>
-  </div>
-
-  <!-- Role -->
-  <div class="text-section">
-    <div class="wrap">
-      <div class="text-grid">
-        <div class="text-label r">My Role</div>
-        <div class="text-body">
-          <p class="r">Solo designer on a founding team. I ran research sprints with early beta users, <strong>defined the AI transparency model</strong> (what the system shows about its reasoning, when it asks for confirmation, when it acts silently), and shipped the product design in eight weeks from first prototype.</p>
-          <p class="r r-d1">I also pushed back on the original product scope. The v1 spec was too broad. I made the case — with data from six user interviews — to cut three features and ship a tighter core. That decision is what let us launch on time.</p>
-        </div>
-      </div>
+    <div class="dual-right sr-dual">
+      <img src="../assets/images/PA_2nd.png" alt="Picking app secondary screen" />
     </div>
-  </div>
+  </section>
+  <p class="dual-caption sr">AI suggestion panel with confidence indicators and override controls</p>
 
-  <!-- Images 2 -->
-  <div class="img-section">
-    <div class="wrap">
-      <div class="bento bento-3 r">
-        <div class="img-cell medium">
-          <img src="https://placehold.co/800x440/111111/555555?text=Onboarding+Flow" alt="Onboarding flow" data-parallax="0.08" />
-        </div>
-        <div class="img-cell medium">
-          <img src="https://placehold.co/400x440/161616/555555?text=Empty+State" alt="Empty state" data-parallax="0.14" />
-        </div>
-        <div class="img-cell medium">
-          <img src="https://placehold.co/400x440/161616/555555?text=Error+Handling" alt="Error handling" data-parallax="0.1" />
-        </div>
+  <!-- ════ SECTION 5 — IMPACT ROW ════ -->
+  <section class="impact-row">
+    <div class="impact-grid">
+
+      <div class="impact-item sr-metric" style="--i:0">
+        <div class="impact-n impact-n--accent">60%</div>
+        <div class="impact-l">Faster pick time</div>
       </div>
-      <div class="img-hero r" style="margin-top:12px; height:clamp(240px,30vw,400px);">
-        <img src="https://placehold.co/1280x480/111111/555555?text=Workflow+Builder" alt="Workflow builder" data-parallax="0.12" />
+
+      <div class="impact-divider"></div>
+
+      <div class="impact-item sr-metric" style="--i:1">
+        <div class="impact-n">4.8</div>
+        <div class="impact-l">App store rating</div>
       </div>
-      <p class="img-caption r">Onboarding, edge cases, and the workflow builder canvas</p>
+
+      <div class="impact-divider"></div>
+
+      <div class="impact-item sr-metric" style="--i:2">
+        <div class="impact-n">0<span style="color:var(--accent)">→</span>1</div>
+        <div class="impact-l">Full product design</div>
+      </div>
+
+      <div class="impact-divider"></div>
+
+      <div class="impact-item sr-metric" style="--i:3">
+        <div class="impact-n">12<sup>mo</sup></div>
+        <div class="impact-l">Seed to launch</div>
+      </div>
+
     </div>
-  </div>
-
-  <!-- Outcome -->
-  <div class="text-section">
-    <div class="wrap">
-      <div class="text-grid">
-        <div class="text-label r">Outcome</div>
-        <div class="text-body">
-          <p class="r">Loops launched to a 4.8 App Store rating. Onboarding completion improved 60% over our initial prototype. <strong>The trust model worked</strong> — users reported feeling "in control" even when the AI was doing most of the work, which was the exact thing we were designing for.</p>
-          <p class="r r-d1">The company closed a Series A six months post-launch. The design system and AI transparency framework I built became a core part of the pitch deck.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Images 3 -->
-  <div class="img-section">
-    <div class="wrap">
-      <div class="bento bento-3b r">
-        <div class="img-cell tall">
-          <img src="https://placehold.co/400x560/161616/555555?text=Mobile+View" alt="Mobile view" data-parallax="0.12" />
-        </div>
-        <div class="img-cell tall">
-          <img src="https://placehold.co/400x560/111111/555555?text=Notifications" alt="Notifications" data-parallax="0.08" />
-        </div>
-        <div class="img-cell tall">
-          <img src="https://placehold.co/800x560/111111/555555?text=Analytics+Dashboard" alt="Analytics" data-parallax="0.15" />
-        </div>
-      </div>
-      <p class="img-caption r">Mobile experience, notification system, and analytics dashboard</p>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <a href="atlas.html" class="next-project">
-      <div>
-        <div class="next-label">Next project</div>
-        <div class="next-name">Atlas</div>
-      </div>
-      <span class="next-arrow">↗</span>
-    </a>
-  </div>
+  </section>
 
   <footer>
-    <div class="wrap">
-      <div class="footer-inner">
-        <span class="footer-copy">© 2024 Nuwan Withanage</span>
-        <ul class="footer-links">
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="mailto:hello@nuwan.design">Email</a></li>
-        </ul>
-      </div>
+    <div class="footer-inner sr">
+      <span class="footer-copy">© 2024 Nuwan Withanage</span>
+      <ul class="footer-links">
+        <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="mailto:hello@nuwan.design">Email</a></li>
+      </ul>
     </div>
   </footer>
 
   <script>
-    const dot=document.getElementById('c-dot'),ring=document.getElementById('c-ring');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-    (function loop(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+    // ─── Cursor ───────────────────────────────────────────
+    const dot  = document.getElementById('c-dot');
+    const ring = document.getElementById('c-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function loop() {
+      dot.style.left  = mx + 'px'; dot.style.top  = my + 'px';
+      rx += (mx - rx) * .1;        ry += (my - ry) * .1;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
 
-    const nav=document.getElementById('nav');
-    window.addEventListener('scroll',()=>nav.classList.toggle('blur',scrollY>60),{passive:true});
-
-    document.querySelectorAll('.r').forEach(el=>
-      new IntersectionObserver(([e])=>{if(e.isIntersecting)el.classList.add('on');},{threshold:.1,rootMargin:'0px 0px -32px 0px'}).observe(el)
+    // ─── Nav blur on scroll ───────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () =>
+      nav.classList.toggle('blur', scrollY > 60), { passive: true }
     );
 
-    const parallaxImgs=document.querySelectorAll('img[data-parallax]');
-    function onScroll(){
-      parallaxImgs.forEach(img=>{
-        const factor=parseFloat(img.dataset.parallax);
-        const rect=img.closest('.img-cell,.img-hero').getBoundingClientRect();
-        const center=rect.top+rect.height/2-window.innerHeight/2;
-        img.style.transform=`translateY(${center*factor}px) scale(1)`;
+    // ─── Page load animation ──────────────────────────────
+    // Double-raf ensures initial opacity:0 is painted before transition fires
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => document.body.classList.add('loaded'))
+    );
+
+    // ─── Scroll reveal (IntersectionObserver) ────────────
+    // Once visible, class stays permanently (no re-animation on scroll up)
+    const srSelectors = '.sr, .sr-hero, .sr-ctx, .sr-dual, .sr-metric';
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // fire once only
+        }
       });
-    }
-    window.addEventListener('scroll',onScroll,{passive:true});
-    onScroll();
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(srSelectors).forEach(el => observer.observe(el));
   </script>
+
 </body>
 </html>
