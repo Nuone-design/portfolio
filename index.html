@@ -412,26 +412,6 @@
       color: var(--text);
     }
 
-    /* ── Selected Work heading animated underline */
-    #work .section-heading {
-      position: relative;
-      display: inline-block;
-    }
-    #work .section-heading::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: rgba(255,255,255,0.15);
-    }
-    @keyframes draw-underline {
-      to { width: 100%; }
-    }
-    #work .section-eye.on .section-heading::after {
-      animation: draw-underline 1.2s ease-out 0.5s forwards;
-    }
 
     /* ── Selected Work — rows */
     .work-card {
@@ -445,7 +425,8 @@
       transition: background .25s ease, border-top-color .25s ease;
       text-decoration: none;
     }
-    .work-card:last-child { border-bottom: 1px solid var(--border); }
+    #work .wrap .work-card:nth-child(2) { border-top: none; }
+    .work-card:last-child { border-bottom: none; }
     .work-card:hover {
       background: rgba(255,255,255,0.02);
       border-top-color: rgba(255,255,255,0.15);
@@ -1041,15 +1022,32 @@
     <div class="wrap">
       <div class="section-eye r">
         <h2 class="section-heading">Selected Work</h2>
-        <span class="mono" style="color:var(--text-muted)">2021 – 2024</span>
       </div>
 
-      <a href="work/sales-room.html" class="work-card r">
+      <a href="work/edge.html" class="work-card r">
         <div class="wc-img">
           <span class="wc-num">01</span>
         </div>
         <div class="wc-body">
-          <h3 class="wc-title">Digital Sales Room</h3>
+          <h3 class="wc-title">Edge: AI creative sparring tool</h3>
+          <p class="wc-desc">Designed and built in 3 days with Claude Code. Every other AI tool ends with text. Edge ends with a visual creative brief.</p>
+        </div>
+        <div class="wc-meta">
+          <div class="wc-tags">
+            <span class="wc-tag">Research-led</span>
+            <span class="wc-tag">IA</span>
+            <span class="wc-tag">Scale</span>
+          </div>
+          <span class="wc-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="work/sales-room.html" class="work-card r r-d1">
+        <div class="wc-img">
+          <span class="wc-num">02</span>
+        </div>
+        <div class="wc-body">
+          <h3 class="wc-title">Sales Room: De-risking platform bet</h3>
           <p class="wc-desc">De-risking a €2M platform bet before a single line of code was written. Product discovery that stopped the right thing at the right time.</p>
         </div>
         <div class="wc-meta">
@@ -1062,13 +1060,13 @@
         </div>
       </a>
 
-      <a href="work/picking-app.html" class="work-card r r-d1">
-        <div class="wc-img">
-          <span class="wc-num">02</span>
-          <img src="assets/images/PA_2nd.png" alt="Picking app interface" />
+      <a href="work/picking-app.html" class="work-card r r-d2">
+        <div class="wc-img" style="background:#E5ECEA;">
+          <span class="wc-num">03</span>
+          <video src="assets/images/picking-animation.mov" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:contain;display:block;"></video>
         </div>
         <div class="wc-body">
-          <h3 class="wc-title">Picking app: Designing for speed</h3>
+          <h3 class="wc-title">Picking App: Designing for efficiency gains</h3>
           <p class="wc-desc">AI-powered workflow tool. Led design from strategy through launch — high ambiguity, small team, tight feedback loops with AI/ML engineers.</p>
         </div>
         <div class="wc-meta">
@@ -1076,24 +1074,6 @@
             <span class="wc-tag">AI / ML</span>
             <span class="wc-tag">Strategy</span>
             <span class="wc-tag">Ambiguity</span>
-          </div>
-          <span class="wc-arrow">↗</span>
-        </div>
-      </a>
-
-      <a href="work/edge.html" class="work-card r r-d2">
-        <div class="wc-img">
-          <span class="wc-num">03</span>
-        </div>
-        <div class="wc-body">
-          <h3 class="wc-title">Atlas</h3>
-          <p class="wc-desc">Navigation &amp; IA overhaul. Research-led restructuring across a product at scale — 200k+ users, significant org influence required.</p>
-        </div>
-        <div class="wc-meta">
-          <div class="wc-tags">
-            <span class="wc-tag">Research-led</span>
-            <span class="wc-tag">IA</span>
-            <span class="wc-tag">Scale</span>
           </div>
           <span class="wc-arrow">↗</span>
         </div>
