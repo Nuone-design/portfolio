@@ -81,6 +81,11 @@
     .text-body p:last-child { margin-bottom: 0; }
     .text-body strong { color: var(--text); font-weight: 400; }
 
+    .outcome-bullets { list-style: none; padding: 0; margin-top: 16px; }
+    .outcome-bullets li { font-family: var(--font-sans); font-size: var(--text-body); font-weight: 300; line-height: 1.8; color: var(--text-mid); }
+    .outcome-bullets li + li { margin-top: 8px; }
+    .outcome-bullets li::before { content: "—"; color: var(--accent); margin-right: 12px; }
+
     .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--border); transition: padding .3s; }
     .next-project:hover { padding-left: 20px; }
     .next-label { font-family: var(--font-sans); font-size: var(--text-label); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
@@ -153,30 +158,15 @@
 
   <header class="cs-header">
     <div class="wrap">
-      <h1 class="cs-title r">Picking app: Designing for speed</h1>
-      <div class="cs-intro">
-        <p class="cs-summary r r-d1">
-          An AI-native workflow tool for operations teams. Built in a high-ambiguity environment with a founding team of six. <strong>I led design from the first whiteboard session through public launch</strong>, shaping product strategy, navigating AI UX patterns, and building trust with non-technical users who were deeply sceptical of automation.
-        </p>
-        <div class="cs-stats r r-d2">
-          <div class="cs-stat">
-            <div class="cs-stat-n">0<span style="color:var(--accent)">→</span>1</div>
-            <div class="cs-stat-l">Full product design</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">60<sup>%</sup></div>
-            <div class="cs-stat-l">Onboarding improvement</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">4.8</div>
-            <div class="cs-stat-l">App store rating</div>
-          </div>
-          <div class="cs-stat">
-            <div class="cs-stat-n">12<sup>mo</sup></div>
-            <div class="cs-stat-l">Seed to launch</div>
-          </div>
-        </div>
+      <div class="cs-meta r">
+        <span class="cs-meta-tag">Warehouse Tech</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">2024</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">Lead Product Designer</span>
       </div>
+      <h1 class="cs-title r r-d1">Picking app: Designing for speed</h1>
+      <p class="cs-summary r r-d2" style="line-height:1.7;">Designing a high-throughput picking experience that increased worker efficiency by 60% and unlocked enterprise adoption. I led the design from first whiteboard session to public launch, shaping product strategy, design and building.</p>
     </div>
   </header>
 
@@ -195,8 +185,7 @@
       <div class="text-grid">
         <div class="text-label r">The Problem</div>
         <div class="text-body">
-          <p class="r">Operations teams run on repetition. The same approval chains, the same routing logic, the same exception handling, repeated hundreds of times a week. The opportunity was clear: <strong>use AI to handle the pattern recognition, let humans handle the exceptions</strong>.</p>
-          <p class="r r-d1">The challenge was trust. These users had been burned by automation before — by tools that broke silently, gave no explanation, and left them holding the consequences. Making AI feel reliable, not reckless, was the central design problem.</p>
+          <p class="r">Goods picking often breaks down in real conditions, constant movement, interruptions and time pressure make it hard to stay fast and accurate at scale.</p>
         </div>
       </div>
     </div>
@@ -220,6 +209,10 @@
         <div class="text-body">
           <p class="r">Loops launched to a 4.8 App Store rating. Onboarding completion improved 60% over our initial prototype. <strong>The trust model worked.</strong> Users reported feeling "in control" even when the AI was doing most of the work, which was the exact thing we were designing for.</p>
           <p class="r r-d1">The company closed a Series A six months post-launch. The design system and AI transparency framework I built became a core part of the pitch deck.</p>
+          <ul class="outcome-bullets r r-d1">
+            <li>60% efficiency increased</li>
+            <li>Sustained post-launch adoption</li>
+          </ul>
         </div>
       </div>
     </div>
