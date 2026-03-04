@@ -667,6 +667,89 @@
       line-height: 1.65;
     }
 
+    /* ── How I Work: motion enhancements ─────────────────────────── */
+
+    /* Section heading — word-by-word slide from left */
+    .how-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .how-word:nth-child(2) { transition-delay: 0.08s; }
+    .how-word:nth-child(3) { transition-delay: 0.16s; }
+    #how.is-triggered .how-word { opacity: 1; transform: translateX(0); }
+
+    /* Card entrance — staggered translateY reveal */
+    #how .principle {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+    #how .principle:nth-child(1) {
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0s,
+                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0s,
+                  border-color 0.3s ease;
+    }
+    #how .principle:nth-child(2) {
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0.15s,
+                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0.15s,
+                  border-color 0.3s ease;
+    }
+    #how .principle:nth-child(3) {
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0.3s,
+                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0.3s,
+                  border-color 0.3s ease;
+    }
+    #how.is-triggered .principle { opacity: 1; transform: translateY(0); }
+
+    /* Card border highlight on hover */
+    #how .principle:hover { border-color: rgba(255, 255, 255, 0.15); }
+
+    /* Lime word — clip reveal */
+    .lime-clip {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      line-height: 1.2;
+    }
+    .lime-word {
+      display: inline-block;
+      transform: translateY(105%);
+      transition: transform 0.6s ease-out;
+      color: var(--accent);
+      font-style: normal;
+    }
+    #how .principle:nth-child(1).is-visible .lime-word { transform: translateY(0); transition-delay: 0.30s; }
+    #how .principle:nth-child(2).is-visible .lime-word { transform: translateY(0); transition-delay: 0.45s; }
+    #how .principle:nth-child(3).is-visible .lime-word { transform: translateY(0); transition-delay: 0.60s; }
+
+    /* Proof point — hidden, expands on card hover */
+    .principle-proof {
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.4);
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      margin-top: 16px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+    }
+    .principle:hover .principle-proof {
+      max-height: 80px;
+      opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .how-word         { transition: none; opacity: 1; transform: none; }
+      #how .principle   { transition: none; opacity: 1; transform: none; }
+      .lime-word        { transition: none; transform: none; }
+      .principle-proof  { transition: none; }
+    }
+
     /* ─── About ───────────────────────────────────────────────────── */
     #about {
       padding: 120px 0;
@@ -1173,25 +1256,28 @@
   <!-- ─── How I Work ─────────────────────────────────────────────────── -->
   <section id="how">
     <div class="wrap">
-      <div class="section-eye r">
-        <h2 class="section-heading">How I Work</h2>
+      <div class="section-eye">
+        <h2 class="section-heading"><span class="how-word">How</span> <span class="how-word">I</span> <span class="how-word">Work</span></h2>
       </div>
 
       <div class="principles">
-        <div class="principle r">
+        <div class="principle">
           <div class="principle-n">01 / Approach</div>
-          <h3 class="principle-h">Systems before <em>screens</em></h3>
+          <h3 class="principle-h">Systems before <span class="lime-clip"><em class="lime-word">screens</em></span></h3>
           <p class="principle-p">I design the model before the interface. Every screen is a consequence of decisions made upstream — about structure, hierarchy, and how the product evolves over time.</p>
+          <p class="principle-proof">e.g. On the Picking app I mapped the full job flow before opening Figma.</p>
         </div>
-        <div class="principle r r-d1">
+        <div class="principle">
           <div class="principle-n">02 / Craft</div>
-          <h3 class="principle-h">Clarity is <em>craft</em></h3>
+          <h3 class="principle-h">Clarity is <span class="lime-clip"><em class="lime-word">craft</em></span></h3>
           <p class="principle-p">The best design is the one that disappears. I obsess over reducing cognitive load — not because it looks clean, but because it earns trust. Complexity is a design failure wearing a feature hat.</p>
+          <p class="principle-proof">e.g. Removed 3 confirmation steps — completion rate went up 60%.</p>
         </div>
-        <div class="principle r r-d2">
+        <div class="principle">
           <div class="principle-n">03 / Collaboration</div>
-          <h3 class="principle-h">Design is a <em>conversation</em></h3>
+          <h3 class="principle-h">Design is a <span class="lime-clip"><em class="lime-word">conversation</em></span></h3>
           <p class="principle-p">I work with engineers, PMs, and data teams early and often. The best design decisions I've made happened in a whiteboard session, not Figma. Influence matters more than ownership.</p>
+          <p class="principle-proof">e.g. The best call I made on Atlas happened in a Slack thread, not a review.</p>
         </div>
       </div>
     </div>
@@ -1523,6 +1609,32 @@
           ticking = true;
         }
       }, { passive: true });
+    })();
+
+    // ── How I Work: scroll entrance + lime reveal ──────────────────────
+    (function () {
+      const how = document.getElementById('how');
+      if (!how) return;
+
+      // Instant reveal for reduced-motion users
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        how.classList.add('is-triggered');
+        how.querySelectorAll('.principle').forEach(c => c.classList.add('is-visible'));
+        return;
+      }
+
+      const howObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-triggered');
+          e.target.querySelectorAll('.principle').forEach(function (card) {
+            card.classList.add('is-visible');
+          });
+          howObs.unobserve(e.target);
+        });
+      }, { threshold: 0.2 });
+
+      howObs.observe(how);
     })();
   </script>
 </body>
