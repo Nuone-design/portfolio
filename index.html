@@ -682,17 +682,6 @@
 
     /* ── How I Work: motion enhancements ─────────────────────────── */
 
-    /* Section heading — word-by-word slide from left */
-    .how-word {
-      display: inline-block;
-      opacity: 0;
-      transform: translateX(-20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .how-word:nth-child(2) { transition-delay: 0.08s; }
-    .how-word:nth-child(3) { transition-delay: 0.16s; }
-    #how.is-triggered .how-word { opacity: 1; transform: translateX(0); }
-
     /* Card entrance — staggered translateY reveal */
     #how .principle {
       opacity: 0;
@@ -757,7 +746,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .how-word         { transition: none; opacity: 1; transform: none; }
       #how .principle   { transition: none; opacity: 1; transform: none; }
       .lime-word        { transition: none; transform: none; }
       .principle-proof  { transition: none; }
@@ -1172,15 +1160,6 @@
   <!-- ─── Marquee ───────────────────────────────────────────────────── -->
   <div id="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <!-- set 1 -->
-      <span class="marquee-item">AI Forward Design<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Product Sense<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Design Strategy<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Zero to One &amp; Scaling<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Design Systems<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Executive Alignment<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Platforms B2B<span class="marquee-dot"></span></span>
-      <!-- set 2 — exact duplicate for seamless loop -->
       <span class="marquee-item">AI Forward Design<span class="marquee-dot"></span></span>
       <span class="marquee-item">Product Sense<span class="marquee-dot"></span></span>
       <span class="marquee-item">Design Strategy<span class="marquee-dot"></span></span>
@@ -1195,7 +1174,7 @@
   <section id="work">
     <div class="wrap">
       <div class="section-eye r">
-        <h2 class="section-heading">Selected Work</h2>
+        <h2 class="section-heading">Selected work</h2>
       </div>
 
       <a href="work/edge.html" class="work-card r">
@@ -1259,8 +1238,8 @@
   <!-- ─── How I Work ─────────────────────────────────────────────────── -->
   <section id="how">
     <div class="wrap">
-      <div class="section-eye">
-        <h2 class="section-heading"><span class="how-word">How</span> <span class="how-word">I</span> <span class="how-word">Work</span></h2>
+      <div class="section-eye r">
+        <h2 class="section-heading">How I work</h2>
       </div>
 
       <div class="principles">
@@ -1614,47 +1593,51 @@
       }, { passive: true });
     })();
 
-    // ── Marquee: JS-driven loop (fixed px/s, flawless reset) ──────────
+    // ── Marquee: JS-driven, dynamically filled for all screen sizes ────
     (function () {
       const marqueeEl = document.getElementById('marquee');
       const track     = document.querySelector('.marquee-track');
       if (!marqueeEl || !track) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Fixed speed — same on every device
-      const SPEED = 80; // px per second
+      const SPEED = 80; // px per second — identical on every device
 
-      let setWidth = 0;
-      let offset   = 0;
-      let lastTs   = null;
+      // --- Step 1: measure one set of items BEFORE any cloning ---
+      const oneSetWidth = track.scrollWidth;
 
-      function measure() {
-        // Two identical sets → set width = half total scroll width
-        setWidth = track.scrollWidth / 2;
+      // --- Step 2: clone items until track is always gapless ---
+      // Guarantee: even at max offset (oneSetWidth - 1px),
+      // the viewport is still fully covered by the track.
+      // Required: totalTrackWidth >= oneSetWidth + containerWidth + oneSetWidth (buffer)
+      const originalItems = Array.from(track.children);
+      while (track.scrollWidth < oneSetWidth + marqueeEl.offsetWidth + oneSetWidth) {
+        originalItems.forEach(function (item) {
+          track.appendChild(item.cloneNode(true));
+        });
       }
+
+      // --- Step 3: RAF loop at fixed px/s ---
+      var offset = 0;
+      var lastTs = null;
 
       function tick(ts) {
         if (lastTs === null) lastTs = ts;
-        // Cap delta to 50ms so a tab-switch doesn't cause a jump
-        const dt = Math.min(ts - lastTs, 50);
+        var dt = Math.min(ts - lastTs, 50); // cap spike after tab-switch
         lastTs = ts;
 
         offset += SPEED * (dt / 1000);
-        // Reset by exactly one set width — keeps the remainder, no jump
-        if (offset >= setWidth) offset -= setWidth;
+        if (offset >= oneSetWidth) offset -= oneSetWidth; // seamless reset
 
         track.style.transform = 'translateX(' + (-offset).toFixed(2) + 'px)';
         requestAnimationFrame(tick);
       }
 
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      measure();
       requestAnimationFrame(tick);
 
-      // Hover glow — track mouse X as a percentage
+      // Hover glow — update --mx as cursor moves across the strip
       marqueeEl.addEventListener('mousemove', function (e) {
-        const rect = marqueeEl.getBoundingClientRect();
-        const pct  = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+        var rect = marqueeEl.getBoundingClientRect();
+        var pct  = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
         marqueeEl.style.setProperty('--mx', pct + '%');
       });
     })();
