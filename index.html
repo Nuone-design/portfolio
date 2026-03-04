@@ -436,12 +436,30 @@
       border-bottom: 1px solid var(--border);
       padding: 20px 0;
       background: var(--surface);
+      position: relative;
+      --mx: 50%;
     }
+    /* Subtle hover glow — follows cursor */
+    #marquee::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 55% 120% at var(--mx) 50%,
+        rgba(220, 255, 160, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 1;
+    }
+    #marquee:hover::after { opacity: 1; }
     .marquee-track {
       display: flex;
       gap: 0;
       white-space: nowrap;
-      animation: marquee 28s linear infinite;
+      will-change: transform;
     }
     .marquee-item {
       display: inline-flex;
@@ -461,10 +479,6 @@
       background: var(--accent);
       border-radius: 50%;
       flex-shrink: 0;
-    }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
     }
 
     /* ─── Work ────────────────────────────────────────────────────── */
@@ -1159,31 +1173,21 @@
   <div id="marquee" aria-hidden="true">
     <div class="marquee-track">
       <!-- set 1 -->
-      <span class="marquee-item">Product Strategy<span class="marquee-dot"></span></span>
+      <span class="marquee-item">AI Forward Design<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Product Sense<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Design Strategy<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Zero to One &amp; Scaling<span class="marquee-dot"></span></span>
       <span class="marquee-item">Design Systems<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Discovery &amp; Validation<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Interaction Design<span class="marquee-dot"></span></span>
-      <span class="marquee-item">B2B SaaS &amp; Platforms<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Prototyping<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Stakeholder Influence<span class="marquee-dot"></span></span>
-      <span class="marquee-item">0→1 &amp; Scaling<span class="marquee-dot"></span></span>
       <span class="marquee-item">Executive Alignment<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Cross-functional Leadership<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Ambiguity → Clarity<span class="marquee-dot"></span></span>
-      <span class="marquee-item">AI-forward Thinking<span class="marquee-dot"></span></span>
-      <!-- set 2 — duplicate for seamless loop -->
-      <span class="marquee-item">Product Strategy<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Platforms B2B<span class="marquee-dot"></span></span>
+      <!-- set 2 — exact duplicate for seamless loop -->
+      <span class="marquee-item">AI Forward Design<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Product Sense<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Design Strategy<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Zero to One &amp; Scaling<span class="marquee-dot"></span></span>
       <span class="marquee-item">Design Systems<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Discovery &amp; Validation<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Interaction Design<span class="marquee-dot"></span></span>
-      <span class="marquee-item">B2B SaaS &amp; Platforms<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Prototyping<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Stakeholder Influence<span class="marquee-dot"></span></span>
-      <span class="marquee-item">0→1 &amp; Scaling<span class="marquee-dot"></span></span>
       <span class="marquee-item">Executive Alignment<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Cross-functional Leadership<span class="marquee-dot"></span></span>
-      <span class="marquee-item">Ambiguity → Clarity<span class="marquee-dot"></span></span>
-      <span class="marquee-item">AI-forward Thinking<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Platforms B2B<span class="marquee-dot"></span></span>
     </div>
   </div>
 
@@ -1608,6 +1612,51 @@
           ticking = true;
         }
       }, { passive: true });
+    })();
+
+    // ── Marquee: JS-driven loop (fixed px/s, flawless reset) ──────────
+    (function () {
+      const marqueeEl = document.getElementById('marquee');
+      const track     = document.querySelector('.marquee-track');
+      if (!marqueeEl || !track) return;
+
+      // Fixed speed — same on every device
+      const SPEED = 80; // px per second
+
+      let setWidth = 0;
+      let offset   = 0;
+      let lastTs   = null;
+
+      function measure() {
+        // Two identical sets → set width = half total scroll width
+        setWidth = track.scrollWidth / 2;
+      }
+
+      function tick(ts) {
+        if (lastTs === null) lastTs = ts;
+        // Cap delta to 50ms so a tab-switch doesn't cause a jump
+        const dt = Math.min(ts - lastTs, 50);
+        lastTs = ts;
+
+        offset += SPEED * (dt / 1000);
+        // Reset by exactly one set width — keeps the remainder, no jump
+        if (offset >= setWidth) offset -= setWidth;
+
+        track.style.transform = 'translateX(' + (-offset).toFixed(2) + 'px)';
+        requestAnimationFrame(tick);
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      measure();
+      requestAnimationFrame(tick);
+
+      // Hover glow — track mouse X as a percentage
+      marqueeEl.addEventListener('mousemove', function (e) {
+        const rect = marqueeEl.getBoundingClientRect();
+        const pct  = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+        marqueeEl.style.setProperty('--mx', pct + '%');
+      });
     })();
 
     // ── How I Work: scroll entrance + lime reveal ──────────────────────
