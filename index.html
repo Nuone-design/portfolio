@@ -201,8 +201,9 @@
       position: relative;
       overflow: hidden;
       padding: 120px 48px 80px;
-      border-bottom: 1px solid var(--border);
     }
+    #hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); z-index: 2; }
+    #hero:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
     /* Layer 1 — depth gradient */
     .hero-gradient {
@@ -433,12 +434,13 @@
     /* ─── Marquee ─────────────────────────────────────────────────── */
     #marquee {
       overflow: hidden;
-      border-bottom: 1px solid var(--border);
       padding: 20px 0;
       background: var(--surface);
       position: relative;
       --mx: 50%;
     }
+    #marquee::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); z-index: 2; }
+    #marquee:hover::before { animation: divider-bob 2s ease-in-out infinite; }
     /* Subtle hover glow — follows cursor */
     #marquee::after {
       content: '';
@@ -484,8 +486,10 @@
     /* ─── Work ────────────────────────────────────────────────────── */
     #work {
       padding: 120px 0;
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
+    #work::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    #work:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
     .section-eye {
       display: flex;
@@ -554,6 +558,12 @@
     .work-card:hover .wc-img img {
       transform: scale(1);
       opacity: 1;
+    }
+    /* Video thumbnail — always playing, no hover gate */
+    .wc-img video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     /* Shimmer sweep */
@@ -630,132 +640,14 @@
     }
 
     /* ─── Principles ──────────────────────────────────────────────── */
-    #how {
-      padding: 120px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .principles {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 80px;
-      border-left: 1px solid var(--border);
-    }
-
-    .principle {
-      padding: 56px 48px;
-      border-right: 1px solid var(--border);
-    }
-
-    .principle-n {
-      font-family: var(--font-sans);
-      font-size: var(--text-label);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-    }
-
-    .principle-h {
-      font-family: var(--font-sans);
-      font-size: var(--text-subheading);
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    .principle-h em {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .principle-p {
-      font-family: var(--font-sans);
-      font-size: var(--text-body);
-      font-weight: 400;
-      color: var(--text-mid);
-      line-height: 1.65;
-    }
-
-    /* ── How I Work: motion enhancements ─────────────────────────── */
-
-    /* Card entrance — staggered translateY reveal */
-    #how .principle {
-      opacity: 0;
-      transform: translateY(32px);
-    }
-    #how .principle:nth-child(1) {
-      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0s,
-                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0s,
-                  border-color 0.3s ease;
-    }
-    #how .principle:nth-child(2) {
-      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0.15s,
-                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0.15s,
-                  border-color 0.3s ease;
-    }
-    #how .principle:nth-child(3) {
-      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0.3s,
-                  transform 0.7s cubic-bezier(0.4,0,0.2,1) 0.3s,
-                  border-color 0.3s ease;
-    }
-    #how.is-triggered .principle { opacity: 1; transform: translateY(0); }
-
-    /* Card border highlight on hover */
-    #how .principle:hover { border-color: rgba(255, 255, 255, 0.15); }
-
-    /* Lime word — clip reveal */
-    .lime-clip {
-      display: inline-block;
-      overflow: hidden;
-      vertical-align: bottom;
-      line-height: 1.2;
-    }
-    .lime-word {
-      display: inline-block;
-      transform: translateY(105%);
-      transition: transform 0.6s ease-out;
-      color: var(--accent);
-      font-style: normal;
-    }
-    #how .principle:nth-child(1).is-visible .lime-word { transform: translateY(0); transition-delay: 0.30s; }
-    #how .principle:nth-child(2).is-visible .lime-word { transform: translateY(0); transition-delay: 0.45s; }
-    #how .principle:nth-child(3).is-visible .lime-word { transform: translateY(0); transition-delay: 0.60s; }
-
-    /* Proof point — hidden, expands on card hover */
-    .principle-proof {
-      font-family: var(--font-sans);
-      font-size: var(--text-body);
-      font-weight: 400;
-      font-style: italic;
-      color: rgba(255, 255, 255, 0.4);
-      border-left: 2px solid var(--accent);
-      padding-left: 12px;
-      margin-top: 16px;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease, opacity 0.35s ease;
-    }
-    .principle:hover .principle-proof {
-      max-height: 80px;
-      opacity: 1;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      #how .principle   { transition: none; opacity: 1; transform: none; }
-      .lime-word        { transition: none; transform: none; }
-      .principle-proof  { transition: none; }
-    }
 
     /* ─── About ───────────────────────────────────────────────────── */
     #about {
       padding: 120px 0;
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
+    #about::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    #about:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
     .about-grid {
       display: grid;
@@ -766,12 +658,12 @@
     .about-left { padding-top: 6px; }
 
     .about-label {
-      font-family: var(--font-sans);
-      font-size: var(--text-label);
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: var(--text-heading);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--text);
       margin-bottom: 32px;
     }
 
@@ -809,7 +701,6 @@
     /* ─── Beyond Work ──────────────────────────────────────────────── */
     #beyond {
       padding: 120px 0;
-      border-bottom: 1px solid var(--border);
     }
 
     .beyond-header {
@@ -822,8 +713,6 @@
     .beyond-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
     }
 
     .beyond-col {
@@ -831,8 +720,29 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      position: relative;
+      transition: transform .5s cubic-bezier(.16,1,.3,1), background .5s;
     }
+    .beyond-col::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .beyond-col:hover { transform: translateY(-8px); background: rgba(255,255,255,.025); }
+    .beyond-col:hover::after { transform: scaleX(1); }
     .beyond-col:first-child { border-right: 1px solid var(--border); }
+
+    @keyframes stat-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .beyond-stat-n { animation: stat-float 5s ease-in-out infinite; }
+    .beyond-col:nth-child(2) .beyond-stat-n { animation-delay: -2.5s; }
 
     .beyond-col-sub {
       font-family: var(--font-sans);
@@ -928,15 +838,14 @@
     .cta-quote {
       font-family: var(--font-display);
       font-size: var(--text-heading);
-      font-weight: 300;
+      font-weight: 100;
       letter-spacing: -0.02em;
-      line-height: 1.05;
-      color: var(--text);
-      max-width: 900px;
+      line-height: 1.25;
+      color: var(--text-mid);
       margin-bottom: 64px;
     }
 
-    .cta-quote span { color: var(--accent); }
+    .cta-quote span { color: var(--text-mid); }
 
     .cta-row {
       display: flex;
@@ -978,9 +887,11 @@
 
     /* ─── Footer ──────────────────────────────────────────────────── */
     footer {
-      border-top: 1px solid var(--border);
       padding: 36px 0;
+      position: relative;
     }
+    footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    footer:hover::before { animation: divider-bob 2s ease-in-out infinite; }
 
     .footer-inner {
       display: flex;
@@ -1030,7 +941,7 @@
       #marquee { overflow: hidden; }
 
       /* Sections */
-      #work, #how, #about, #cta { padding: 64px 0; }
+      #work, #about, #cta { padding: 64px 0; }
 
       /* Work cards */
       .work-card {
@@ -1051,7 +962,7 @@
       #beyond { padding: 64px 0; }
       .beyond-cols { grid-template-columns: 1fr; }
       .beyond-col { padding: 40px 32px; border-right: none; }
-      .beyond-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .beyond-col:first-child { border-right: none; border-bottom: none; }
 
       /* CTA */
       .cta-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -1061,10 +972,272 @@
       .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
     }
 
+    /* ─── AI-native Work ─────────────────────────────────────── */
+    #ai-work {
+      padding: 120px 0 0;
+      position: relative;
+    }
+    #ai-work::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    #ai-work:hover::after { animation: divider-bob 2s ease-in-out infinite; }
+
+    .ai-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .ai-title {
+      font-family: var(--font-display);
+      font-size: var(--text-heading);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--text);
+    }
+
+    .ai-nav { display: flex; gap: 8px; }
+
+    .ai-nav-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .ai-nav-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+    .ai-track-wrap {
+      padding-bottom: 120px;
+    }
+
+    .ai-track {
+      display: flex;
+      gap: 2px;
+    }
+
+    .ai-card {
+      flex: 0 0 calc((100% - 4px) / 3);
+      min-width: 0;
+      scroll-snap-align: start;
+      background: #111;
+      overflow: hidden;
+      border-left: 2px solid transparent;
+      transform: translateY(0);
+      transition: transform 0.3s ease, border-color 0.25s ease;
+      cursor: pointer;
+    }
+    .ai-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .ai-thumb {
+      aspect-ratio: 4/3;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      background: var(--surface);
+    }
+    .ai-thumb img, .ai-thumb video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .ai-card:hover .ai-thumb img,
+    .ai-card:hover .ai-thumb video { transform: scale(1.03); }
+
+    .ai-thumb-letter {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 120px;
+      color: white; opacity: 0.04;
+      user-select: none; pointer-events: none;
+    }
+
+    .ai-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .ai-card:hover .ai-thumb-overlay { opacity: 1; }
+
+    .ai-overlay-icon {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white;
+      transform: scale(0.8); transition: transform 0.25s ease;
+    }
+    .ai-card:hover .ai-overlay-icon { transform: scale(1); }
+
+    .ai-content {
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .ai-card-name {
+      font-family: var(--font-sans);
+      font-size: var(--text-subheading);
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .ai-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ai-tag {
+      font-family: var(--font-sans);
+      font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 3px 8px; border-radius: 2px;
+    }
+
+    /* Entrance animation */
+    .ai-header, .ai-track-wrap {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .ai-track-wrap { transition-delay: 0.1s; }
+    #ai-work.is-visible .ai-header,
+    #ai-work.is-visible .ai-track-wrap { opacity: 1; transform: translateY(0); }
+
+    /* Modal backdrop */
+    .ai-modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 900;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .ai-modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .ai-modal {
+      position: relative;
+      max-width: 1100px; width: 100%;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      max-height: 90vh; overflow: hidden;
+      display: flex; flex-direction: column;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .ai-modal-backdrop.open .ai-modal { transform: translateY(0) scale(1); }
+
+    .ai-modal-media {
+      flex-shrink: 0;
+      overflow: hidden; background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ai-modal-media video {
+      width: 100%; height: auto; object-fit: contain; display: block;
+      max-height: 72vh;
+    }
+    .ai-modal-media img {
+      width: 100%; height: auto; object-fit: contain; display: block; padding: 24px;
+      max-height: 72vh;
+    }
+    .ai-modal-media-letter {
+      font-family: var(--font-display);
+      font-size: 200px; color: white; opacity: 0.04; user-select: none;
+    }
+
+    .ai-modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1; transition: background 0.2s;
+    }
+    .ai-modal-close:hover { background: rgba(0,0,0,0.8); }
+
+    .ai-modal-body { padding: 32px 36px 36px; overflow-y: auto; }
+
+    .ai-modal-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 20px;
+      margin-bottom: 24px;
+    }
+    .ai-modal-title {
+      font-family: var(--font-sans);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 500; color: var(--text); letter-spacing: -0.02em;
+    }
+    .ai-visit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent); color: var(--bg);
+      font-family: var(--font-sans);
+      font-size: var(--text-label); font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 10px 16px; text-decoration: none;
+      flex-shrink: 0; white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .ai-visit-btn:hover { opacity: 0.85; }
+
+    .ai-modal-divider { display: none; }
+
+    .ai-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+    .ai-modal-label {
+      font-family: var(--font-sans); font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 10px;
+    }
+    .ai-modal-text {
+      font-family: var(--font-sans); font-size: 14px;
+      color: rgba(255,255,255,0.65); line-height: 1.7;
+    }
+    .ai-modal-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ai-modal-pill {
+      font-family: var(--font-sans); font-size: 11px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 5px 12px; color: var(--text-muted);
+    }
+    .ai-modal-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 20px;
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid rgba(200,255,0,.3);
+      padding-bottom: 2px;
+      transition: gap .2s, border-color .2s;
+      text-decoration: none;
+    }
+    .ai-modal-cta:hover { gap: 14px; border-color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .ai-track { flex-direction: column; gap: 2px; }
+      .ai-card { flex: 0 0 auto; width: 100%; }
+      .ai-modal-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ai-header, .ai-track-wrap,
+      .ai-card, .ai-thumb img, .ai-thumb video,
+      .ai-thumb-overlay, .ai-overlay-icon,
+      .ai-modal, .ai-modal-backdrop { transition: none !important; transform: none !important; opacity: 1 !important; }
+    }
+
     @media (max-width: 480px) {
       /* Tighter padding on very small screens */
       #hero { padding: 60px 20px 64px; }
-      #work, #how, #about, #cta { padding: 48px 0; }
+      #work, #about, #cta { padding: 48px 0; }
       .hero-glow { width: 100vw; height: 80vw; }
 
       /* Work section header */
@@ -1111,10 +1284,10 @@
       <div class="nav-right">
         <ul class="nav-links">
           <li><a href="#work">Work</a></li>
-          <li><a href="#how">Process</a></li>
+          <li><a href="#ai-work">AI projects</a></li>
           <li><a href="#about">About</a></li>
         </ul>
-        <a href="mailto:hello@nuwan.design" class="nav-cta">Get in touch</a>
+        <a href="mailto:nuone.withanage@gmail.com" class="nav-cta">Get in touch</a>
       </div>
     </div>
   </nav>
@@ -1180,6 +1353,9 @@
       <a href="work/edge.html" class="work-card r">
         <div class="wc-img">
           <span class="wc-num">01</span>
+          <video autoplay muted loop playsinline>
+            <source src="assets/video/Thumbnail_web.mp4" type="video/mp4" />
+          </video>
         </div>
         <div class="wc-body">
           <h3 class="wc-title">Edge: AI creative sparring tool</h3>
@@ -1216,7 +1392,7 @@
       <a href="work/picking-app.html" class="work-card r r-d2">
         <div class="wc-img" style="background:#E5ECEA;">
           <span class="wc-num">03</span>
-          <video src="assets/images/picking-animation.mov" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:contain;display:block;"></video>
+          <video src="assets/video/picking-animation.mp4" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:contain;display:block;"></video>
         </div>
         <div class="wc-body">
           <h3 class="wc-title">Picking App: Designing for efficiency gains</h3>
@@ -1235,35 +1411,45 @@
     </div>
   </section>
 
-  <!-- ─── How I Work ─────────────────────────────────────────────────── -->
-  <section id="how">
+  <!-- ─── AI-native work ──────────────────────────────────────────────── -->
+  <section id="ai-work">
     <div class="wrap">
-      <div class="section-eye r">
-        <h2 class="section-heading">How I work</h2>
+      <div class="ai-header">
+        <h2 class="ai-title">AI projects</h2>
       </div>
-
-      <div class="principles">
-        <div class="principle">
-          <div class="principle-n">01 / Approach</div>
-          <h3 class="principle-h">Systems before <span class="lime-clip"><em class="lime-word">screens</em></span></h3>
-          <p class="principle-p">I design the model before the interface. Every screen is a consequence of decisions made upstream — about structure, hierarchy, and how the product evolves over time.</p>
-          <p class="principle-proof">e.g. On the Picking app I mapped the full job flow before opening Figma.</p>
-        </div>
-        <div class="principle">
-          <div class="principle-n">02 / Craft</div>
-          <h3 class="principle-h">Clarity is <span class="lime-clip"><em class="lime-word">craft</em></span></h3>
-          <p class="principle-p">The best design is the one that disappears. I obsess over reducing cognitive load — not because it looks clean, but because it earns trust. Complexity is a design failure wearing a feature hat.</p>
-          <p class="principle-proof">e.g. Removed 3 confirmation steps — completion rate went up 60%.</p>
-        </div>
-        <div class="principle">
-          <div class="principle-n">03 / Collaboration</div>
-          <h3 class="principle-h">Design is a <span class="lime-clip"><em class="lime-word">conversation</em></span></h3>
-          <p class="principle-p">I work with engineers, PMs, and data teams early and often. The best design decisions I've made happened in a whiteboard session, not Figma. Influence matters more than ownership.</p>
-          <p class="principle-proof">e.g. The best call I made on Atlas happened in a Slack thread, not a review.</p>
-        </div>
+      <div class="ai-track-wrap" id="ai-track-wrap">
+        <div class="ai-track" id="ai-track"></div>
       </div>
     </div>
   </section>
+
+  <!-- AI Modal -->
+  <div class="ai-modal-backdrop" id="ai-modal-backdrop" aria-modal="true" role="dialog">
+    <div class="ai-modal" id="ai-modal">
+      <div class="ai-modal-media" id="ai-modal-media"></div>
+      <button class="ai-modal-close" id="ai-modal-close" aria-label="Close">✕</button>
+      <div class="ai-modal-body">
+        <div class="ai-modal-head">
+          <div class="ai-modal-title" id="ai-modal-title"></div>
+          <a class="ai-visit-btn" id="ai-visit-btn" href="#" target="_blank" rel="noopener">Visit ↗</a>
+        </div>
+        <div class="ai-modal-divider"></div>
+        <div class="ai-modal-grid">
+          <div>
+            <div class="ai-modal-label" id="ai-modal-problem-label">The problem</div>
+            <div class="ai-modal-text" id="ai-modal-problem"></div>
+            <div class="ai-modal-text" id="ai-modal-body" style="margin-top:12px;"></div>
+            <a class="ai-modal-cta" id="ai-modal-cta" href="#" target="_blank" rel="noopener" style="display:none;"></a>
+          </div>
+          <div>
+            <div class="ai-modal-label">Built with</div>
+            <div class="ai-modal-pills" id="ai-modal-pills"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ─── About ──────────────────────────────────────────────────────── -->
   <section id="about">
@@ -1275,16 +1461,18 @@
             <span>Based in —</span>
             <span>Berlin, Germany</span>
             <span style="margin-top:16px">Available —</span>
-            <span>Globally / Remote</span>
+            <span>Hybrid, Remote, Globally</span>
             <span style="margin-top:16px">Focused on —</span>
-            <span>B2B SaaS &amp; Platforms</span>
+            <span>AI Native</span>
+            <span>Product building</span>
             <span>Strategy + Craft</span>
           </div>
         </div>
         <div class="about-right">
-          <p class="r">I've spent 10+ years designing B2B SaaS products where design decisions directly impact adoption, revenue, and strategic risk.</p>
-          <p class="r r-d1">I work best at the intersection of <strong>product strategy and craft</strong>. I partner closely with Product and Engineering to frame ambiguous problems, surface early signals, and help teams make confident decisions — before over-investing.</p>
-          <p class="r r-d2">My work has influenced roadmap direction, improved deal win rates, and accelerated delivery through scalable design systems. I'm hands-on by default, and most effective when design is treated as a business partner — not a service function.</p>
+          <p class="r">I'm a product design leader with 10+ years working on complex platform products where design directly shapes adoption, revenue and strategic risk.</p>
+          <p class="r r-d1">I'm hands-on by default, comfortable in high-ambiguity environments, and most effective when design is treated as a business partner not a service function.</p>
+          <p class="r r-d2">Lately I've been deep in AI — not just designing for it but building with it. I use Claude Code to ship real products, prototype ideas fast and explore what <strong>AI-native product experiences</strong> actually feel like from the inside. I think the designers who understand how to build with AI will define the next generation of software development.</p>
+          <p class="r" style="transition-delay:.3s;">I love fitness and compete in half marathons and Hyrox races. The kind of events that reward consistency over talent.</p>
         </div>
       </div>
     </div>
@@ -1294,8 +1482,7 @@
   <section id="beyond">
     <div class="wrap">
       <div class="beyond-header r">
-        <h2 class="section-heading">Outside the screen</h2>
-        <span class="mono" style="color:var(--text-muted)">05 — Beyond the work</span>
+        <h2 class="section-heading">When I'm not working</h2>
       </div>
 
       <div class="beyond-cols">
@@ -1344,13 +1531,13 @@
   <section id="cta">
     <div class="wrap">
       <blockquote class="cta-quote r">
-        "I'm looking for teams who believe design is how you earn trust at scale —<span> not just how you make things look good.</span>"
+        "If something here resonated, a project, an idea or a problem you're sitting on<span> then reach out. I like interesting conversations.</span>"
       </blockquote>
       <div class="cta-row r r-d1">
-        <a href="mailto:hello@nuwan.design" class="btn btn-fill">
+        <a href="mailto:nuone.withanage@gmail.com" class="btn btn-fill">
           Get in touch <span>→</span>
         </a>
-        <a href="#" class="btn btn-line">
+        <a href="https://drive.google.com/file/d/1qA_cVcu-5TI1PH9Y9m3c7KJnujvsOvuk/view?usp=drive_link" target="_blank" rel="noopener" class="btn btn-line">
           Download CV <span>↓</span>
         </a>
       </div>
@@ -1361,11 +1548,10 @@
   <footer>
     <div class="wrap">
       <div class="footer-inner">
-        <span class="footer-copy">© 2024 Nuwan Withanage</span>
+        <span class="footer-copy">© 2026 Nuwan Withanage</span>
         <ul class="footer-links">
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="https://dribbble.com"  target="_blank" rel="noopener">Dribbble</a></li>
-          <li><a href="mailto:hello@nuwan.design">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/nuwanwith/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:nuone.withanage@gmail.com">Email</a></li>
         </ul>
       </div>
     </div>
@@ -1642,31 +1828,153 @@
       });
     })();
 
-    // ── How I Work: scroll entrance + lime reveal ──────────────────────
+    // ── AI-native work section ─────────────────────────────────────────
     (function () {
-      const how = document.getElementById('how');
-      if (!how) return;
+      var AI_PROJECTS = [
+        {
+          name: 'Haiku machine',
+          thumb: null,
+          letter: 'H',
+          tags: ['Claude code', 'AI'],
+          url: '#',
+          problem: 'Teams waste hours routing tasks through email and Slack threads. Loop uses AI to read intent and route automatically.',
+          stack: ['Claude API', 'Next.js', 'Vercel', 'Postgres']
+        },
+        {
+          name: 'Design System',
+          hideTitle: true,
+          thumb: 'assets/images/1Ds.png',
+          modalThumb: 'assets/video/DS_web.mp4',
+          letter: 'D',
+          tags: ['Design system', 'Built with AI'],
+          url: '#',
+          problemLabel: 'Design System',
+          problem: '',
+          body: 'Building & restructuring design system & documentation fully with Claude code. Work in progress.',
+          stack: ['Claude Code', 'AI']
+        },
+        {
+          name: 'Meteorites',
+          hideTitle: true,
+          thumb: 'assets/images/Game_thumb.png',
+          modalThumb: 'assets/video/Game_web.mp4',
+          letter: 'M',
+          tags: ['Cursor', 'Game', 'AI'],
+          url: '#',
+          problemLabel: 'Meteorites',
+          problem: '',
+          body: 'Meteorites burst game created during a cursor hackathon.',
+          cta: { label: 'Launch Meteorites ↗', href: 'https://game-gamma-sand.vercel.app/' },
+          stack: ['Cursor', 'Hackathon', 'AI', 'Game']
+        }
+      ];
 
-      // Instant reveal for reduced-motion users
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        how.classList.add('is-triggered');
-        how.querySelectorAll('.principle').forEach(c => c.classList.add('is-visible'));
-        return;
+      var track = document.getElementById('ai-track');
+      var wrap  = document.getElementById('ai-track-wrap');
+      if (!track || !wrap) return;
+
+      // Build cards
+      AI_PROJECTS.forEach(function (p, i) {
+        var card = document.createElement('div');
+        card.className = 'ai-card';
+        card.setAttribute('data-index', i);
+
+        var isVideo = p.thumb && /\.(mp4|mov|webm)$/i.test(p.thumb);
+        var thumbHtml = p.thumb
+          ? (isVideo
+              ? '<video src="' + p.thumb + '" autoplay muted loop playsinline></video>'
+              : '<img src="' + p.thumb + '" alt="' + p.name + '" loading="lazy" />')
+          : '<span class="ai-thumb-letter">' + p.letter + '</span>';
+
+        var tagsHtml = p.tags.map(function (t) {
+          return '<span class="ai-tag">' + t + '</span>';
+        }).join('');
+
+        card.innerHTML =
+          '<div class="ai-thumb">' +
+            thumbHtml +
+            '<div class="ai-thumb-overlay"><div class="ai-overlay-icon">↗</div></div>' +
+          '</div>' +
+          '<div class="ai-content">' +
+            '<div class="ai-card-name">' + p.name + '</div>' +
+            '<div class="ai-tags">' + tagsHtml + '</div>' +
+          '</div>';
+
+        card.addEventListener('click', function () { openModal(i); });
+        track.appendChild(card);
+      });
+
+      // Modal
+      var backdrop = document.getElementById('ai-modal-backdrop');
+      var modalTitle = document.getElementById('ai-modal-title');
+      var modalMedia = document.getElementById('ai-modal-media');
+      var modalProblem = document.getElementById('ai-modal-problem');
+      var modalProblemLabel = document.getElementById('ai-modal-problem-label');
+      var modalBody = document.getElementById('ai-modal-body');
+      var modalPills = document.getElementById('ai-modal-pills');
+      var modalCta = document.getElementById('ai-modal-cta');
+      var visitBtn = document.getElementById('ai-visit-btn');
+
+      function openModal(i) {
+        var p = AI_PROJECTS[i];
+        var media = p.modalThumb || p.thumb;
+        var isVid = media && /\.(mp4|mov|webm)$/i.test(media);
+        modalTitle.textContent = p.name;
+        modalTitle.style.display = p.hideTitle ? 'none' : '';
+        visitBtn.href = p.url;
+        visitBtn.style.display = p.url === '#' ? 'none' : '';
+        modalMedia.innerHTML = media
+          ? (isVid
+              ? '<video src="' + media + '" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>'
+              : '<img src="' + media + '" alt="' + p.name + '" />')
+          : '<div class="ai-modal-media-letter">' + p.letter + '</div>';
+        modalProblemLabel.textContent = p.problemLabel || 'The problem';
+        modalProblem.textContent = p.problem || '';
+        modalBody.textContent = p.body || '';
+        if (p.cta) {
+          modalCta.href = p.cta.href;
+          modalCta.textContent = p.cta.label;
+          modalCta.style.display = 'inline-flex';
+        } else {
+          modalCta.style.display = 'none';
+        }
+        modalPills.innerHTML = p.stack.map(function (s) {
+          return '<span class="ai-modal-pill">' + s + '</span>';
+        }).join('');
+        backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
 
-      const howObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (!e.isIntersecting) return;
-          e.target.classList.add('is-triggered');
-          e.target.querySelectorAll('.principle').forEach(function (card) {
-            card.classList.add('is-visible');
-          });
-          howObs.unobserve(e.target);
-        });
-      }, { threshold: 0.2 });
+      function closeModal() {
+        backdrop.classList.remove('open');
+        document.body.style.overflow = '';
+      }
 
-      howObs.observe(how);
+      document.getElementById('ai-modal-close').addEventListener('click', closeModal);
+      backdrop.addEventListener('click', function (e) {
+        if (e.target === backdrop) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // Entrance animation
+      var aiSection = document.getElementById('ai-work');
+      if (aiSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var aiObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            aiSection.classList.add('is-visible');
+            aiObs.unobserve(aiSection);
+          });
+        }, { threshold: 0.1 });
+        aiObs.observe(aiSection);
+      } else if (aiSection) {
+        aiSection.classList.add('is-visible');
+      }
     })();
+
   </script>
+  <script src="assets/js/divider-wave.js"></script>
 </body>
 </html>
