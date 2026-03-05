@@ -440,7 +440,6 @@
       --mx: 50%;
     }
     #marquee::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); z-index: 2; }
-    #marquee:hover::before { animation: divider-bob 2s ease-in-out infinite; }
     /* Subtle hover glow — follows cursor */
     #marquee::after {
       content: '';
@@ -1371,27 +1370,9 @@
         </div>
       </a>
 
-      <a href="work/sales-room.html" class="work-card r r-d1">
-        <div class="wc-img">
-          <span class="wc-num">02</span>
-        </div>
-        <div class="wc-body">
-          <h3 class="wc-title">Sales Room: De-risking platform bet</h3>
-          <p class="wc-desc">De-risking a €2M platform bet before a single line of code was written. Product discovery that stopped the right thing at the right time.</p>
-        </div>
-        <div class="wc-meta">
-          <div class="wc-tags">
-            <span class="wc-tag">Discovery</span>
-            <span class="wc-tag">Validation</span>
-            <span class="wc-tag">B2B SaaS</span>
-          </div>
-          <span class="wc-arrow">↗</span>
-        </div>
-      </a>
-
-      <a href="work/picking-app.html" class="work-card r r-d2">
+      <a href="work/picking-app.html" class="work-card r r-d1">
         <div class="wc-img" style="background:#E5ECEA;">
-          <span class="wc-num">03</span>
+          <span class="wc-num">02</span>
           <video src="assets/video/picking-animation.mp4" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:contain;display:block;"></video>
         </div>
         <div class="wc-body">
@@ -1403,6 +1384,25 @@
             <span class="wc-tag">AI / ML</span>
             <span class="wc-tag">Strategy</span>
             <span class="wc-tag">Ambiguity</span>
+          </div>
+          <span class="wc-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="work/sales-room.html" class="work-card r r-d2">
+        <div class="wc-img" style="background:#1C2020;">
+          <span class="wc-num">03</span>
+          <img src="assets/images/DSR_Thumbnail.png" alt="Sales Room thumbnail" style="opacity:1; transform:none;" />
+        </div>
+        <div class="wc-body">
+          <h3 class="wc-title">Sales Room: De-risking platform bet</h3>
+          <p class="wc-desc">De-risking a €2M platform bet before a single line of code was written. Product discovery that stopped the right thing at the right time.</p>
+        </div>
+        <div class="wc-meta">
+          <div class="wc-tags">
+            <span class="wc-tag">Discovery</span>
+            <span class="wc-tag">Validation</span>
+            <span class="wc-tag">B2B SaaS</span>
           </div>
           <span class="wc-arrow">↗</span>
         </div>
@@ -1833,12 +1833,17 @@
       var AI_PROJECTS = [
         {
           name: 'Haiku machine',
-          thumb: null,
+          hideTitle: true,
+          thumb: 'assets/images/Haiku.png',
+          modalThumb: 'assets/video/Haiku.mp4',
           letter: 'H',
           tags: ['Claude code', 'AI'],
           url: '#',
-          problem: 'Teams waste hours routing tasks through email and Slack threads. Loop uses AI to read intent and route automatically.',
-          stack: ['Claude API', 'Next.js', 'Vercel', 'Postgres']
+          problemLabel: 'Haiku Machine',
+          problem: '',
+          body: 'An AI-powered poetry instrument built with Claude Code, drop any photograph and it finds the haiku hidden inside it',
+          cta: { label: 'Launch Haiku Machine ↗', href: 'https://haiku-machine.vercel.app/' },
+          stack: ['Claude Code', 'AI']
         },
         {
           name: 'Design System',

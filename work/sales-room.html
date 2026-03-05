@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Digital Sales Room — Nuwan Withanage</title>
+  <title>Sales Room — Nuwan Withanage</title>
+  <link rel="stylesheet" href="../assets/css/type.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #080808; --surface: #111111; --surface-2: #161616;
       --border: #1e1e1e; --text: #f0f0f0; --text-muted: #888888;
       --text-mid: #b0b0b0; --accent: #c8ff00;
-      --font-sans: 'DM Sans', sans-serif;
+      --font-sans: 'Saans', Helvetica, sans-serif;
       --font-mono: 'DM Mono', monospace;
       --pad-x: clamp(24px, 5vw, 80px);
     }
@@ -41,111 +42,31 @@
     .r.on { opacity: 1; transform: none; }
     .r-d1 { transition-delay: .1s; } .r-d2 { transition-delay: .2s; } .r-d3 { transition-delay: .3s; }
 
-    /* ═══════════════════════════════════════════
-       PAGE HEADER — split: title left / meta right
-    ═══════════════════════════════════════════ */
-    .cs-header {
-      padding-top: 140px;
-      padding-bottom: 64px;
-      border-bottom: 1px solid var(--border);
-    }
+    /* ── Header — matches Edge / Picking App */
+    .cs-header { padding-top: 140px; padding-bottom: 80px; position: relative; }
+    .cs-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    .cs-header:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
-    .cs-header-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: end;
-    }
+    .cs-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+    .cs-meta-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+    .cs-meta-sep { color: var(--border); }
 
-    .cs-left {}
+    .cs-title { font-family: var(--font-sans); font-size: var(--text-heading); font-weight: 200; letter-spacing: -.03em; line-height: 1.05; color: var(--text); margin-bottom: 40px; }
+    .cs-summary { font-size: var(--text-body); font-weight: 300; line-height: 1.65; color: var(--text-mid); }
+    .cs-summary strong { color: var(--text); font-weight: 400; }
 
-    .cs-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-    .cs-tag {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .cs-tag + .cs-tag::before { content: '·'; margin-right: 8px; color: var(--border); }
-
-    .cs-title {
-      font-size: clamp(44px, 7.5vw, 104px);
-      font-weight: 200;
-      letter-spacing: -.04em;
-      line-height: .92;
-      color: var(--text);
-    }
-
-    .cs-right {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      padding-bottom: 4px;
-    }
-
-    .cs-subtitle {
-      font-size: clamp(16px, 1.7vw, 20px);
-      font-weight: 300;
-      line-height: 1.6;
-      color: var(--text-mid);
-    }
-
-    .cs-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-    }
-    .cs-stat {
-      background: var(--bg);
-      padding: 20px 20px;
-    }
-    .cs-stat-n {
-      font-size: 24px;
-      font-weight: 200;
-      letter-spacing: -.025em;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .cs-stat-l {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    /* ═══════════════════════════════════════════
-       FULL-BLEED IMAGE GRIDS
-    ═══════════════════════════════════════════ */
-    .img-block { border-bottom: 1px solid var(--border); padding: 48px 0; }
-
-    /* gap between cells */
-    .bento { display: grid; gap: 2px; }
-    .bento-3col  { grid-template-columns: 1fr 1fr 1fr; }
-    .bento-2col  { grid-template-columns: 1fr 1fr; }
-    .bento-asym  { grid-template-columns: 3fr 2fr; }
-    .bento-asym2 { grid-template-columns: 2fr 3fr; }
-    .bento-4col  { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    /* ── Image blocks */
+    .img-block { padding: 48px 0; position: relative; }
+    .img-block::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    .img-block:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
     .img-cell {
       overflow: hidden;
-      background: var(--surface);
+      background: #1C2020;
       position: relative;
     }
-    .img-cell.h-tall   { height: clamp(280px, 40vw, 560px); }
-    .img-cell.h-mid    { height: clamp(220px, 30vw, 420px); }
-    .img-cell.h-short  { height: clamp(160px, 22vw, 300px); }
-    .img-cell.h-hero   { height: clamp(360px, 52vw, 700px); }
+    .img-cell.h-hero { height: clamp(360px, 52vw, 700px); }
 
-    /* Reveal: start zoomed in, settle on scroll entry */
     .img-cell img {
       will-change: transform;
       transform: scale(1.08);
@@ -154,185 +75,71 @@
     .img-cell.on img { transform: scale(1); }
     .img-cell.on:hover img { transform: scale(1.05); }
 
-    /* caption strip */
-    .img-caption-bar {
-      padding: 16px 0;
-      border-top: 1px solid var(--border);
-    }
-    .img-caption {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
+    /* ── Text sections */
+    .cs-section { padding: 80px 0; position: relative; }
+    .cs-section::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    .cs-section:hover::after { animation: divider-bob 2s ease-in-out infinite; }
 
-    /* ═══════════════════════════════════════════
-       TEXT SECTIONS
-    ═══════════════════════════════════════════ */
-    .cs-section { padding: 80px 0; border-bottom: 1px solid var(--border); }
-
-    .label-body {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 64px;
-    }
     .section-label {
       font-family: var(--font-mono);
       font-size: 10px;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--text-muted);
-      padding-top: 5px;
     }
+    .section-body { margin-top: 32px; }
     .section-body p {
-      font-size: clamp(15px, 1.7vw, 18px);
+      font-family: var(--font-sans);
+      font-size: var(--text-body);
       font-weight: 300;
       line-height: 1.75;
       color: var(--text-mid);
     }
 
-    /* ═══════════════════════════════════════════
-       ASSUMPTIONS — two-col list
-    ═══════════════════════════════════════════ */
-    .assumptions { margin-top: 40px; }
-    .assumption-head {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .assumption-head span {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .assumption-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .assumption-row:last-child { border-bottom: none; }
-    .a-belief { font-size: 15px; font-weight: 300; color: var(--text); line-height: 1.6; }
-    .a-reality { font-size: 15px; font-weight: 300; color: var(--text-mid); line-height: 1.6; }
+    /* ── Outcomes list */
+    .outcome-bullets { list-style: none; padding: 0; margin-top: 16px; }
+    .outcome-bullets li { font-family: var(--font-sans); font-size: var(--text-body); font-weight: 300; line-height: 1.8; color: var(--text-mid); }
+    .outcome-bullets li + li { margin-top: 8px; }
+    .outcome-bullets li::before { content: "—"; color: var(--accent); margin-right: 12px; }
+    .outcome-bullets li em { color: var(--accent); font-style: normal; }
 
-    /* ═══════════════════════════════════════════
-       OUTCOMES LIST
-    ═══════════════════════════════════════════ */
-    .outcomes { margin-top: 40px; }
-    .outcome-row {
-      display: flex;
-      align-items: baseline;
-      gap: 20px;
-      padding: 22px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .outcome-row:first-child { border-top: 1px solid var(--border); }
-    .outcome-n { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; color: var(--text-muted); width: 20px; flex-shrink: 0; }
-    .outcome-text { font-size: clamp(18px, 2.2vw, 26px); font-weight: 200; letter-spacing: -.015em; color: var(--text); line-height: 1.25; }
-    .outcome-text em { color: var(--accent); font-style: normal; }
-
-    /* ═══════════════════════════════════════════
-       PULL QUOTES — escalating size
-    ═══════════════════════════════════════════ */
-    .pq { padding: 72px 0; border-bottom: 1px solid var(--border); }
-    .pq blockquote {
-      font-weight: 200;
-      letter-spacing: -.025em;
-      line-height: 1.2;
-      color: var(--text);
-      padding-left: 32px;
-      border-left: 1px solid var(--border);
-    }
-    .pq-sm blockquote { font-size: clamp(18px, 2.5vw, 32px); max-width: 720px; }
-    .pq-md blockquote { font-size: clamp(22px, 3.2vw, 44px); max-width: 860px; }
-    .pq-lg blockquote {
-      font-size: clamp(28px, 5vw, 72px);
-      letter-spacing: -.04em;
-      line-height: 1.08;
-      border-left-color: var(--accent);
-      max-width: 1100px;
-    }
-
-    /* ═══════════════════════════════════════════
-       NEXT PROJECT + FOOTER
-    ═══════════════════════════════════════════ */
-    .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; border-top: 1px solid var(--border); transition: padding .3s; }
+    /* ── Next + Footer */
+    .next-project { display: flex; align-items: center; justify-content: space-between; padding: 64px 0; position: relative; transition: padding .3s; }
+    .next-project::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    .next-project:hover::before { animation: divider-bob 2s ease-in-out infinite; }
     .next-project:hover { padding-left: 20px; }
     .next-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
     .next-name { font-size: clamp(32px, 5vw, 64px); font-weight: 200; letter-spacing: -.03em; color: var(--text); }
     .next-arrow { font-size: 32px; color: var(--text-muted); transition: transform .3s, color .3s; }
     .next-project:hover .next-arrow { transform: translate(8px,-8px); color: var(--accent); }
 
-    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    footer { padding: 32px 0; position: relative; }
+    footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--border); }
+    footer:hover::before { animation: divider-bob 2s ease-in-out infinite; }
     .footer-inner { display: flex; align-items: center; justify-content: space-between; }
     .footer-copy { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--text-muted); }
     .footer-links { display: flex; gap: 28px; list-style: none; }
     .footer-links a { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); transition: color .2s; }
     .footer-links a:hover { color: var(--text); }
 
-    /* ═══════════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════════ */
+    /* ── Responsive */
     @media (max-width: 900px) {
-      /* Nav */
       nav { padding: 20px 0; }
-
-      /* Header */
       .cs-header { padding-top: 96px; padding-bottom: 48px; }
-      .cs-header-grid { grid-template-columns: 1fr; gap: 36px; }
-      .cs-stats { grid-template-columns: 1fr 1fr; }
-      .cs-right { gap: 24px; }
-
-      /* Image blocks */
       .img-block { padding: 36px 0; }
-      .bento-3col, .bento-2col, .bento-asym, .bento-asym2, .bento-4col { grid-template-columns: 1fr; }
       .img-cell.h-hero { height: clamp(200px, 56vw, 360px); }
-      .img-cell.h-tall  { height: clamp(200px, 56vw, 340px); }
-      .img-cell.h-mid   { height: clamp(180px, 48vw, 300px); }
-
-      /* Text sections */
       .cs-section { padding: 56px 0; }
-      .label-body { grid-template-columns: 1fr; gap: 20px; }
-
-      /* Assumptions */
-      .assumption-head { display: none; }
-      .assumption-row { grid-template-columns: 1fr; gap: 6px; }
-      .a-reality::before { content: 'Reality — '; font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
-
-      /* Outcomes */
-      .outcome-text { font-size: clamp(16px, 4vw, 22px); }
-
-      /* Pull quotes */
-      .pq { padding: 48px 0; }
-      .pq blockquote { padding-left: 20px; }
-      .pq-sm blockquote { font-size: clamp(16px, 4.5vw, 28px); }
-      .pq-md blockquote { font-size: clamp(18px, 5vw, 34px); }
-      .pq-lg blockquote { font-size: clamp(22px, 6.5vw, 48px); }
-
-      /* Next project */
       .next-project { padding: 40px 0; }
       .next-project:hover { padding-left: 0; }
       .next-name { font-size: clamp(28px, 7vw, 48px); }
-
-      /* Footer */
       .footer-inner { flex-direction: column; gap: 20px; align-items: flex-start; }
     }
 
     @media (max-width: 480px) {
       .cs-header { padding-top: 80px; padding-bottom: 36px; }
-      .cs-stats { grid-template-columns: 1fr 1fr; gap: 1px; }
-      .cs-stat { padding: 16px; }
-      .cs-stat-n { font-size: 20px; }
       .cs-section { padding: 40px 0; }
       .img-block { padding: 24px 0; }
       .img-cell.h-hero { height: 52vw; }
-      .img-cell.h-tall, .img-cell.h-mid { height: 56vw; }
     }
   </style>
 </head>
@@ -351,40 +158,15 @@
   <!-- ═══ PAGE HEADER ═══════════════════════════════════════════════ -->
   <header class="cs-header">
     <div class="wrap">
-      <div class="cs-header-grid">
-
-        <div class="cs-left r">
-          <div class="cs-tags">
-            <span class="cs-tag">Product Discovery</span>
-            <span class="cs-tag">Validation</span>
-            <span class="cs-tag">B2B SaaS</span>
-          </div>
-          <h1 class="cs-title">Digital<br>Sales Room</h1>
-        </div>
-
-        <div class="cs-right r r-d1">
-          <p class="cs-subtitle">De-risking a €2M platform bet before a single line of code was written.</p>
-          <div class="cs-stats">
-            <div class="cs-stat">
-              <div class="cs-stat-n">7 wks</div>
-              <div class="cs-stat-l">Timeline</div>
-            </div>
-            <div class="cs-stat">
-              <div class="cs-stat-n">€2M+</div>
-              <div class="cs-stat-l">Opportunity cost prevented</div>
-            </div>
-            <div class="cs-stat">
-              <div class="cs-stat-n">~8 mo</div>
-              <div class="cs-stat-l">Roadmap avoided</div>
-            </div>
-            <div class="cs-stat">
-              <div class="cs-stat-n">1</div>
-              <div class="cs-stat-l">Designer</div>
-            </div>
-          </div>
-        </div>
-
+      <div class="cs-meta r">
+        <span class="cs-meta-tag">Product Discovery</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">Validation</span>
+        <span class="cs-meta-sep">·</span>
+        <span class="cs-meta-tag">B2B SaaS</span>
       </div>
+      <h1 class="cs-title r r-d1">Sales Room: De-risking<br>2M platform bet</h1>
+      <p class="cs-summary r r-d2">The company was under pressure to invest in a Digital Sales Room, driven by analyst hype, internal revenue narratives, and interest from a marquee enterprise customer before there was evidence customers were ready to adopt it.</p>
     </div>
   </header>
 
@@ -392,205 +174,50 @@
   <div class="img-block">
     <div class="wrap">
       <div class="img-cell h-hero r">
-        <img src="https://placehold.co/1600x700/111111/888888?text=Digital+Sales+Room+—+Overview" alt="Digital Sales Room overview" data-parallax="0.12" />
+        <img src="../assets/images/DSR1.png" alt="Sales Room overview" data-parallax="0.12" />
       </div>
     </div>
   </div>
 
-  <!-- ═══ 01 — THE BET ══════════════════════════════════════════════ -->
+  <!-- ═══ THE BET ════════════════════════════════════════════════════ -->
   <div class="cs-section">
     <div class="wrap">
-      <div class="label-body">
-        <div class="section-label r">The Bet</div>
-        <div class="section-body">
-          <p class="r">The company was under pressure to invest in a Digital Sales Room — driven by analyst hype, internal revenue narratives, and a marquee enterprise customer.</p>
-        </div>
+      <div class="section-label r">The Bet</div>
+      <div class="section-body">
+        <p class="r">Turn an abstract, hype-driven idea into something concrete enough to validate or stop before committing significant roadmap and resources.</p>
       </div>
     </div>
   </div>
 
-  <!-- Pull quote 01 — small -->
-  <div class="pq pq-sm">
-    <div class="wrap">
-      <blockquote class="r">"Turn an abstract, hype-driven idea into something concrete enough to validate — or stop."</blockquote>
-    </div>
-  </div>
-
-  <!-- ═══ IMAGE BLOCK A — Assumption mapping ════════════════════════ -->
+  <!-- ═══ 2ND IMAGE — DSR 2 ═════════════════════════════════════════ -->
   <div class="img-block">
     <div class="wrap">
-      <div class="bento bento-3col r">
-        <div class="img-cell h-tall">
-          <img src="https://placehold.co/600x640/111111/888888?text=Assumption+Mapping" alt="Assumption mapping" data-parallax="0.1" />
-        </div>
-        <div class="img-cell h-tall">
-          <img src="https://placehold.co/600x640/161616/888888?text=Discovery+Session" alt="Discovery session" data-parallax="0.16" />
-        </div>
-        <div class="img-cell h-tall">
-          <img src="https://placehold.co/600x640/111111/888888?text=Validation+Prototype" alt="Validation prototype" data-parallax="0.08" />
-        </div>
-      </div>
-      <div class="img-caption-bar r">
-        <span class="img-caption">Assumption mapping · Discovery sessions · Validation prototypes</span>
+      <div class="img-cell h-hero r">
+        <img src="../assets/images/DSR2.png" alt="Sales Room detail" data-parallax="0.1" />
       </div>
     </div>
   </div>
 
-  <!-- ═══ 02 — THE ASSUMPTIONS ═════════════════════════════════════ -->
+  <!-- ═══ THE DECISION & IMPACT ════════════════════════════════════ -->
   <div class="cs-section">
     <div class="wrap">
-      <div class="label-body">
-        <div class="section-label r">Assumptions<br>under pressure</div>
-        <div class="section-body r">
-          <div class="assumptions">
-            <div class="assumption-head">
-              <span>Assumption</span>
-              <span>Reality</span>
-            </div>
-            <div class="assumption-row r">
-              <div class="a-belief">Enterprise sales needed a shared digital workspace</div>
-              <div class="a-reality">Interest ≠ readiness to change entrenched workflows</div>
-            </div>
-            <div class="assumption-row r r-d1">
-              <div class="a-belief">Lighthouse customer = broader demand</div>
-              <div class="a-reality">Enthusiasm for a concept ≠ commercial commitment</div>
-            </div>
-            <div class="assumption-row r r-d2">
-              <div class="a-belief">DSR would shorten cycles and differentiate</div>
-              <div class="a-reality">Adoption required simultaneous behaviour change on both sides</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ IMAGE BLOCK B — Framework + audit ════════════════════════ -->
-  <div class="img-block">
-    <div class="wrap">
-      <div class="bento bento-asym r">
-        <div class="img-cell h-mid">
-          <img src="https://placehold.co/960x420/111111/888888?text=Validation+Framework" alt="Validation framework" data-parallax="0.1" />
-        </div>
-        <div class="img-cell h-mid">
-          <img src="https://placehold.co/640x420/161616/888888?text=Assumption+Audit" alt="Assumption audit" data-parallax="0.14" />
-        </div>
-      </div>
-      <div class="img-caption-bar r">
-        <span class="img-caption">Validation framework · Assumption audit</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ 04 — WHAT I FOUND ═════════════════════════════════════════ -->
-  <div class="cs-section">
-    <div class="wrap">
-      <div class="label-body">
-        <div class="section-label r">What the<br>evidence showed</div>
-        <div class="section-body">
-          <p class="r">We were mistaking conceptual enthusiasm for readiness. No evidence of adoption intent. No timing conviction. No internal capability to support rollout. False validation would have converted enthusiasm into sunk cost.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pull quote 04 — medium -->
-  <div class="pq pq-md">
-    <div class="wrap">
-      <blockquote class="r">"Interest doesn't equal readiness to change entrenched workflows."</blockquote>
-    </div>
-  </div>
-
-  <!-- ═══ IMAGE BLOCK C — Stakeholder alignment ════════════════════ -->
-  <div class="img-block">
-    <div class="wrap">
-      <div class="bento bento-asym2 r">
-        <div class="img-cell h-mid">
-          <img src="https://placehold.co/640x420/161616/888888?text=Stakeholder+Alignment" alt="Stakeholder alignment" data-parallax="0.12" />
-        </div>
-        <div class="img-cell h-mid">
-          <img src="https://placehold.co/960x420/111111/888888?text=Evidence+Review" alt="Evidence review" data-parallax="0.08" />
-        </div>
-      </div>
-      <div class="img-caption-bar r">
-        <span class="img-caption">Stakeholder alignment · Evidence review</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ 06 — THE DECISION ═════════════════════════════════════════ -->
-  <div class="cs-section">
-    <div class="wrap">
-      <div class="label-body">
-        <div class="section-label r">The Decision<br>&amp; Impact</div>
-        <div class="section-body">
-          <div class="outcomes">
-            <div class="outcome-row r">
-              <span class="outcome-n">01</span>
-              <span class="outcome-text">Initiative <em>postponed</em></span>
-            </div>
-            <div class="outcome-row r r-d1">
-              <span class="outcome-n">02</span>
-              <span class="outcome-text">~8 months of roadmap investment <em>avoided</em></span>
-            </div>
-            <div class="outcome-row r r-d2">
-              <span class="outcome-n">03</span>
-              <span class="outcome-text">€2M+ opportunity cost <em>prevented</em></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pull quote 06 — LARGEST -->
-  <div class="pq pq-lg">
-    <div class="wrap">
-      <blockquote class="r">"The most valuable design outcome isn't always a product."</blockquote>
-    </div>
-  </div>
-
-  <!-- ═══ IMAGE BLOCK D — Final 4-up ═══════════════════════════════ -->
-  <div class="img-block">
-    <div class="wrap">
-    <div class="bento bento-4col r">
-      <div class="img-cell h-mid">
-        <img src="https://placehold.co/800x420/111111/888888?text=Research+Synthesis" alt="Research synthesis" data-parallax="0.1" />
-      </div>
-      <div class="img-cell h-mid">
-        <img src="https://placehold.co/400x420/161616/888888?text=Interview+Notes" alt="Interview notes" data-parallax="0.16" />
-      </div>
-      <div class="img-cell h-mid">
-        <img src="https://placehold.co/400x420/111111/888888?text=Decision+Doc" alt="Decision doc" data-parallax="0.1" />
-      </div>
-      <div class="img-cell h-mid">
-        <img src="https://placehold.co/400x420/161616/888888?text=Roadmap+Redirect" alt="Roadmap redirect" data-parallax="0.13" />
-      </div>
-    </div>
-      <div class="img-caption-bar r">
-        <span class="img-caption">Research synthesis · Interview notes · Decision doc · Roadmap redirect</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ 07 — WHAT CHANGED ═════════════════════════════════════════ -->
-  <div class="cs-section">
-    <div class="wrap">
-      <div class="label-body">
-        <div class="section-label r">What changed</div>
-        <div class="section-body">
-          <p class="r">Leadership grounded strategy directly in customer operating reality. Investment shifted from speculative abstractions to foundational capabilities. Roadmap redirected toward self-service and CPQ improvements — the infrastructure adoption actually requires.</p>
-        </div>
+      <div class="section-label r">The Decision &amp; Impact</div>
+      <div class="section-body">
+        <ul class="outcome-bullets r">
+          <li>Initiative <em>postponed</em></li>
+          <li>~8 months of roadmap investment <em>avoided</em></li>
+          <li>€2M+ opportunity cost <em>prevented</em></li>
+        </ul>
       </div>
     </div>
   </div>
 
   <!-- ═══ NEXT PROJECT ══════════════════════════════════════════════ -->
   <div class="wrap">
-    <a href="picking-app.html" class="next-project">
+    <a href="edge.html" class="next-project">
       <div>
         <div class="next-label">Next project</div>
-        <div class="next-name">Loops</div>
+        <div class="next-name">Edge</div>
       </div>
       <span class="next-arrow">↗</span>
     </a>
@@ -599,10 +226,10 @@
   <footer>
     <div class="wrap">
       <div class="footer-inner">
-        <span class="footer-copy">© 2024 Nuwan Withanage</span>
+        <span class="footer-copy">© 2026 Nuwan Withanage</span>
         <ul class="footer-links">
-          <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="mailto:hello@nuwan.design">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/nuwanwith/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:nuone.withanage@gmail.com">Email</a></li>
         </ul>
       </div>
     </div>
@@ -619,7 +246,7 @@
     const nav=document.getElementById('nav');
     window.addEventListener('scroll',()=>nav.classList.toggle('blur',scrollY>60),{passive:true});
 
-    // Scroll reveal — images use class-based trigger, text uses .r/.on
+    // Scroll reveal
     const observer = new IntersectionObserver(entries=>{
       entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
     }, { threshold: 0.07, rootMargin: '0px 0px -24px 0px' });
@@ -630,7 +257,7 @@
     function onScroll(){
       pImgs.forEach(img=>{
         const f = parseFloat(img.dataset.parallax);
-        const wrap = img.closest('.img-cell,.img-hero');
+        const wrap = img.closest('.img-cell');
         if(!wrap) return;
         const rect = wrap.getBoundingClientRect();
         const center = rect.top + rect.height/2 - window.innerHeight/2;
@@ -640,5 +267,6 @@
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
   </script>
+  <script src="../assets/js/divider-wave.js"></script>
 </body>
 </html>

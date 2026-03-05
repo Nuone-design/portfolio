@@ -84,6 +84,12 @@
   --text-label:      clamp(10px, 0.9vw, 12px);    /* Tags, nav, meta */
 }
 
+/* ─── Divider Bob Animation ───────────────────────────────────── */
+@keyframes divider-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
 /* ─── Utility Classes ─────────────────────────────────────────── */
 .text-display {
   font-family: var(--font-display);
